@@ -1,0 +1,65 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        applicationId "cn.cb.btwatermeterpro"
+        minSdkVersion 22
+        targetSdkVersion 30
+        versionCode 100
+        versionName "1.0.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "HTTP_HOST", "\"http://121.15.209.245:9001/MIServer/\"")
+        //buildConfigField("String", "HTTP_HOST", "\"http://192.168.1.23:8080/MIServer/\"")
+        buildConfigField("String", "UPDATE_URL", "\"http://121.15.209.245:9001/appUpdate/cn.cb.btwatermeterpro/update.txt\"")
+    }
+
+    applicationVariants.all {
+        variant ->
+            variant.outputs.all {
+                if (buildType.name == "debug") {
+                    outputFileName = "D_V${defaultConfig.versionName}.apk"
+                } else {
+                    def createTime = new Date().format("YYYYMMddHHmm", TimeZone.getTimeZone("GMT+08:00"))
+
+                    //outputFileName = "${getProductFlavors().name}V${defaultConfig.versionName}_${createTime}.apk"
+                    outputFileName = "BT Pro.R_V${defaultConfig.versionName}_${createTime}.apk"
+                }
+            }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    implementation 'com.github.hss01248:Toasty:2.0.6'
+    implementation 'com.squareup.okhttp3:okhttp:3.12.0'//网络请求框架
+    implementation 'com.alibaba:fastjson:1.1.72.android'
+
+    //implementation 'com.github.q471208499:zxingCB:1.0.2'
+    implementation 'com.github.q471208499:AndBaseCB:1.1.25'
+    implementation 'com.github.q471208499:CB_FastBle:1.2.8'
+}

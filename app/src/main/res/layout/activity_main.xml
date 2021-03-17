@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite3"
+    tools:context=".activity.MainActivity">
+
+    <include layout="@layout/tool_bar" />
+
+    <include
+        layout="@layout/view_tip_bar"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/tool_bar_view" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/search_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tip_bar"
+        tools:listitem="@layout/item_search" />
+
+    <include
+        android:id="@+id/main_empty"
+        layout="@layout/empty_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tip_bar" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/main_start_pause_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:backgroundTint="@color/colorWhite2"
+        android:src="@mipmap/ic_start"
+        app:backgroundTint="@color/colorWhite5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/main_stop_btn" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/main_stop_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:backgroundTint="@color/colorWhite2"
+        android:src="@mipmap/ic_stop"
+        app:backgroundTint="@color/colorWhite5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/main_start_pause_btn"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <Chronometer
+        android:id="@+id/main_chronometer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/tip_bar"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tip_bar" />
+</androidx.constraintlayout.widget.ConstraintLayout>
