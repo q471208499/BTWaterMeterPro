@@ -11,10 +11,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BTWaterMeterPro">
         <activity
-            android:label="蓝牙智能表"
             android:name=".activity.MainActivity"
+            android:label="蓝牙智能表"
             android:theme="@style/AppThemeBase.NoActionBar" />
-        <activity android:name=".activity.LoginActivity">
+        <activity
+            android:name=".activity.LoginActivity"
+            android:theme="@style/AppThemeBase.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

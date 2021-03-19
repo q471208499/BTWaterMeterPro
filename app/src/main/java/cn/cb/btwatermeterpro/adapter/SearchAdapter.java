@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.cb.baselibrary.utils.ABDateUtils;
 import cn.cb.baselibrary.utils.ABTimeUtils;
 import cn.cb.btwatermeterpro.BuildConfig;
 import cn.cb.btwatermeterpro.R;
@@ -24,10 +25,11 @@ import cn.cb.btwatermeterpro.R;
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchViewHolder> {
 
     private Context mContext;
-    private boolean details;
     private List<Map<String, Object>> list = new ArrayList<>();
+    private boolean details;
     private final String KEY_TIMES = "scanTimes";
     private final String KEY_TIME = "scanTime";
+    private final String KEY_RSSI = "Rssi";
     private final String KEY_MAC = "mac";
     private final String KEY_DATA = "data";
 
@@ -49,32 +51,38 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 
     @Override
     public void onBindViewHolder(@NonNull SearchViewHolder holder, int position) {
-        holder.detailsView.setVisibility(details ? View.VISIBLE : View.GONE);
-        holder.noDetailsView.setVisibility(!details ? View.VISIBLE : View.GONE);
-
         Map<String, Object> data = list.get(position);
         String mac = (String) data.get(KEY_MAC);
         String time = (String) data.get(KEY_TIME);
         int times = (int) data.get(KEY_TIMES);
-        Object obj = data.get("KEY_DATA");
+        int Rssi = (int) data.get(KEY_RSSI);
+        Object obj = data.get(KEY_DATA);
+
+        holder.detailsView.setVisibility(details ? View.VISIBLE : View.GONE);
+        //holder.noDetailsView.setVisibility(!details ? View.VISIBLE : View.GONE);
+        //holder.scanObj.setVisibility(obj != null ? View.VISIBLE : View.GONE);
 
         holder.meterCode.setText(mac.replace(":", ""));
+        holder.signal.setText(String.valueOf(Rssi));
+        holder.receiveTime.setText(time);
+        holder.receiveTimes.setText(times + " 次");
         if (obj != null) {
             BTProScan proScan = (BTProScan) obj;
-            holder.totalFlow.setText(String.valueOf(proScan.getFlow()));
-            holder.voltage.setText(String.valueOf(proScan.getVoltage()));
-            holder.signal.setText(String.valueOf(proScan.getSignal()));
-            holder.contraryFlow.setText(String.valueOf(proScan.getContrary()));
-            //holder.nonMagnetic.setText(String.valueOf(proScan.getMagStatus()));
-            holder.instantaneousFlow.setText(String.valueOf(proScan.getInstantaneous()));
-            holder.usageTime.setText(String.valueOf(proScan.getUsageTime()));
-            holder.meterClock.setText(String.valueOf(proScan.getTime()));
-            holder.nonMagneticStatus.setText(String.valueOf(proScan.getMagStatus()));
+            holder.totalFlow.setText(proScan.getFlow() + " m³");
+            holder.voltage.setText(proScan.getVoltage() + " V");
+            holder.contraryFlow.setText(proScan.getContrary() + " m³");
+            holder.nonMagnetic.setText(String.valueOf(proScan.getSignal()));
+            holder.instantaneousFlow.setText(proScan.getInstantaneous() + " 升/时");
+            holder.usageTime.setText(proScan.getUsageTime() + "分");
+            holder.meterClock.setText(getClock(proScan.getTime()));
+            //holder.scanObj.setText(new JSONObject(proScan.getDataMap()).toJSONString());
+            holder.voltageStatus.setVisibility(proScan.getVoltage() <= 3.3 ? View.VISIBLE : View.GONE);
+            holder.nonMagneticStatus.setVisibility(proScan.getSignal() <= 10 ? View.VISIBLE : View.GONE);
         }
-        holder.receiveTime.setText(time);
-        holder.receiveTimes.setText(String.valueOf(times));
-        holder.receiveTime2.setText(time);
-        holder.receiveTimes2.setText(times + "次");
+    }
+
+    private String getClock(String time) {
+        return ABDateUtils.getCurDateStr(ABDateUtils.FORMAT_YMD) + String.format(" %s:%s", time.substring(0, 2), time.substring(2, 4));
     }
 
     @Override
@@ -88,6 +96,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 
     public void addItem(BleDevice bleDevice) {
         BTProScan proScan = new BTProScan(bleDevice.getScanRecord());
+        if (BuildConfig.DEBUG) {
+            proScan = new BTProScan("14 68 01 30 17 B5 F3 C0 08 3E 1C 48 AC 00 00 00 00 78 00 E6 16");
+        }
         String scanMac = bleDevice.getMac();
         if (proScan.verify()) {
             for (int i = 0; i < list.size(); i++) {
@@ -96,6 +107,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
                 if (itemMac.equals(scanMac)) {
                     item.put(KEY_TIMES, (int) item.get(KEY_TIMES) + 1);
                     item.put(KEY_DATA, proScan);
+                    item.put(KEY_RSSI, bleDevice.getRssi());
                     item.put(KEY_TIME, ABTimeUtils.getCurrentTimeInString());
                     notifyItemChanged(i);
                     return;
@@ -105,6 +117,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             map.put(KEY_TIMES, 1);
             map.put(KEY_MAC, scanMac);
             map.put(KEY_DATA, proScan);
+            map.put(KEY_RSSI, bleDevice.getRssi());
             map.put(KEY_TIME, ABTimeUtils.getCurrentTimeInString());
             list.add(map);
             notifyItemChanged(list.size());
@@ -114,8 +127,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
                 String itemMac = (String) item.get(KEY_MAC);
                 if (itemMac.equals(scanMac)) {
                     item.put(KEY_TIMES, (int) item.get(KEY_TIMES) + 1);
-                    //item.put(KEY_DATA, proScan);
                     item.put(KEY_TIME, ABTimeUtils.getCurrentTimeInString());
+                    item.put(KEY_RSSI, bleDevice.getRssi());
                     notifyItemChanged(i);
                     return;
                 }
@@ -123,6 +136,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             Map<String, Object> map = new HashMap<>();
             map.put(KEY_TIMES, 1);
             map.put(KEY_MAC, scanMac);
+            map.put(KEY_RSSI, bleDevice.getRssi());
             map.put(KEY_TIME, ABTimeUtils.getCurrentTimeInString());
             list.add(map);
             notifyItemChanged(list.size());
@@ -131,8 +145,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 
     class SearchViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView meterCode, totalFlow, voltage, signal, contraryFlow, nonMagnetic, instantaneousFlow,
-                usageTime, meterClock, nonMagneticStatus, receiveTime, receiveTimes, receiveTime2, receiveTimes2;
+        private TextView meterCode, totalFlow, voltage, signal, contraryFlow, nonMagnetic,
+                instantaneousFlow, usageTime, meterClock, nonMagneticStatus, voltageStatus,
+                receiveTime, receiveTimes, scanObj;
         private View detailsView, noDetailsView;
 
         public SearchViewHolder(@NonNull View itemView) {
@@ -148,11 +163,11 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             usageTime = itemView.findViewById(R.id.item_usage_time_value);
             meterClock = itemView.findViewById(R.id.item_meter_clock_value);
             nonMagneticStatus = itemView.findViewById(R.id.item_non_magnetic_status_value);
-            receiveTime = itemView.findViewById(R.id.item_receive_time_value);
-            receiveTimes = itemView.findViewById(R.id.item_receive_times_value);
+            voltageStatus = itemView.findViewById(R.id.item_voltage_status_value);
             noDetailsView = itemView.findViewById(R.id.item_no_details);
-            receiveTime2 = itemView.findViewById(R.id.item_receive_time2_value);
-            receiveTimes2 = itemView.findViewById(R.id.item_receive_times2_value);
+            receiveTime = itemView.findViewById(R.id.item_receive_time2_value);
+            receiveTimes = itemView.findViewById(R.id.item_receive_times2_value);
+            scanObj = itemView.findViewById(R.id.item_scan_obj);
         }
     }
 }

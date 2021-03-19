@@ -10,4 +10,5 @@
 
     <color name="colorBtnLight">#FF41C8FE</color>
     <color name="colorBtnDark">#FF29B9F2</color>
+    <color name="colorLogin">#FF45CDFF</color>
 </resources>

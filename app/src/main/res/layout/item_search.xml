@@ -26,6 +26,16 @@
         app:layout_constraintLeft_toRightOf="@id/item_meter_code_key" />
 
     <TextView
+        android:id="@+id/item_voltage_status_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="电池欠压"
+        android:textColor="@android:color/holo_red_light"
+        android:textStyle="bold"
+        app:layout_constraintBaseline_toBaselineOf="@id/item_meter_code_key"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
         android:id="@+id/item_total_flow_key"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,6 +51,16 @@
         android:text="12345.678 m³"
         app:layout_constraintBaseline_toBaselineOf="@id/item_total_flow_key"
         app:layout_constraintLeft_toRightOf="@id/item_total_flow_key" />
+
+    <TextView
+        android:id="@+id/item_non_magnetic_status_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="无磁异常"
+        android:textColor="@android:color/holo_red_light"
+        android:textStyle="bold"
+        app:layout_constraintBaseline_toBaselineOf="@id/item_total_flow_key"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <TextView
         android:id="@+id/item_voltage_key"
@@ -63,9 +83,10 @@
         android:id="@+id/item_signal_key"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginRight="48dp"
         android:text="信号强度："
         app:layout_constraintBaseline_toBaselineOf="@id/item_voltage_key"
-        app:layout_constraintRight_toLeftOf="@id/item_signal_value" />
+        app:layout_constraintRight_toRightOf="parent" />
 
     <TextView
         android:id="@+id/item_signal_value"
@@ -79,7 +100,7 @@
         android:id="@+id/item_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintTop_toBottomOf="@id/item_voltage_key">
 
         <TextView
@@ -87,7 +108,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            android:text="反向流量："
+            android:text="反向用量："
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -103,15 +124,16 @@
             android:id="@+id/item_non_magnetic_key"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="48dp"
             android:text="无磁强度："
             app:layout_constraintBaseline_toBaselineOf="@id/item_contrary_flow_key"
-            app:layout_constraintRight_toLeftOf="@id/item_non_magnetic_value" />
+            app:layout_constraintRight_toRightOf="parent" />
 
         <TextView
             android:id="@+id/item_non_magnetic_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="   25"
+            android:text="25"
             app:layout_constraintBaseline_toBaselineOf="@id/item_contrary_flow_key"
             app:layout_constraintRight_toRightOf="parent" />
 
@@ -136,15 +158,16 @@
             android:id="@+id/item_usage_time_key"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="48dp"
             android:text="连续用水："
             app:layout_constraintBaseline_toBaselineOf="@id/item_instantaneous_flow_key"
-            app:layout_constraintRight_toLeftOf="@id/item_usage_time_value" />
+            app:layout_constraintRight_toRightOf="parent" />
 
         <TextView
             android:id="@+id/item_usage_time_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="20 h"
+            android:text="9999 分"
             app:layout_constraintBaseline_toBaselineOf="@id/item_instantaneous_flow_key"
             app:layout_constraintRight_toRightOf="parent" />
 
@@ -165,67 +188,13 @@
             app:layout_constraintBaseline_toBaselineOf="@id/item_meter_clock_key"
             app:layout_constraintLeft_toRightOf="@id/item_meter_clock_key" />
 
-        <TextView
-            android:id="@+id/item_non_magnetic_status_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="无磁异常"
-            android:textColor="@android:color/holo_red_light"
-            android:textStyle="bold"
-            app:layout_constraintBaseline_toBaselineOf="@id/item_meter_clock_key"
-            app:layout_constraintRight_toRightOf="parent" />
-
-        <TextView
-            android:id="@+id/item_receive_time_key"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:text="接收时间："
-            app:layout_constraintLeft_toLeftOf="@id/item_contrary_flow_key"
-            app:layout_constraintTop_toBottomOf="@id/item_meter_clock_key" />
-
-        <TextView
-            android:id="@+id/item_receive_time_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2021.03.11 02:25:46"
-            app:layout_constraintBaseline_toBaselineOf="@id/item_receive_time_key"
-            app:layout_constraintLeft_toRightOf="@id/item_receive_time_key" />
-
-        <TextView
-            android:id="@+id/item_usage_status_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="反向用水"
-            android:textColor="@android:color/holo_red_light"
-            android:textStyle="bold"
-            app:layout_constraintBaseline_toBaselineOf="@id/item_receive_time_key"
-            app:layout_constraintRight_toRightOf="parent" />
-
-        <TextView
-            android:id="@+id/item_receive_times_key"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:text="接收次数："
-            app:layout_constraintLeft_toLeftOf="@id/item_contrary_flow_key"
-            app:layout_constraintTop_toBottomOf="@id/item_receive_time_key" />
-
-        <TextView
-            android:id="@+id/item_receive_times_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="15"
-            app:layout_constraintBaseline_toBaselineOf="@id/item_receive_times_key"
-            app:layout_constraintLeft_toRightOf="@id/item_receive_times_key" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/item_no_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/item_voltage_key">
+        app:layout_constraintTop_toBottomOf="@id/item_details">
 
         <TextView
             android:id="@+id/item_receive_time2_key"
@@ -249,9 +218,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="15 次"
+            android:textColor="@color/colorGreen"
+            android:textStyle="bold"
             app:layout_constraintBaseline_toBaselineOf="@id/item_receive_time2_key"
             app:layout_constraintRight_toRightOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/item_scan_obj"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:text="AAAAAAAAAAAAAAAAAAAAAA"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_no_details" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,10 +1,12 @@
 package cn.cb.btwatermeterpro.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.EditText;
 
 import java.util.Map;
@@ -13,8 +15,11 @@ import cn.cb.baselibrary.activity.BaseActivity;
 import cn.cb.baselibrary.net.Result;
 import cn.cb.baselibrary.net.okhttp3.NetCallback;
 import cn.cb.baselibrary.utils.ABTextUtils;
+import cn.cb.baselibrary.utils.ABTimeUtils;
+import cn.cb.baselibrary.utils.AppUpdateHelper;
 import cn.cb.baselibrary.utils.MD5;
 import cn.cb.baselibrary.utils.SPUtils;
+import cn.cb.btwatermeterpro.BuildConfig;
 import cn.cb.btwatermeterpro.R;
 import cn.cb.btwatermeterpro.net.RequestUtils;
 import cn.cb.btwatermeterpro.provider.BTConstant;
@@ -30,8 +35,20 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         bindView();
-        //new AppUpdateHelper(BuildConfig.UPDATE_URL + "?" + ABTimeUtils.getCurrentTimeInString()).getUpdateInfo();
+        new AppUpdateHelper(BuildConfig.UPDATE_URL + "?" + ABTimeUtils.getCurrentTimeInString()).getUpdateInfo();
         setData();
+        setStatusBarColor(this, R.color.colorLogin);
+    }
+
+    /**
+     * 修改状态栏颜色
+     *
+     * @param activity
+     * @param colorId
+     */
+    public void setStatusBarColor(Activity activity, int colorId) {
+        Window window = activity.getWindow();
+        window.setStatusBarColor(activity.getResources().getColor(colorId));
     }
 
     private void setData() {
