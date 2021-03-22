@@ -1,12 +1,10 @@
 package cn.cb.btwatermeterpro.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
 import android.widget.EditText;
 
 import java.util.Map;
@@ -37,18 +35,7 @@ public class LoginActivity extends BaseActivity {
         bindView();
         new AppUpdateHelper(BuildConfig.UPDATE_URL + "?" + ABTimeUtils.getCurrentTimeInString()).getUpdateInfo();
         setData();
-        setStatusBarColor(this, R.color.colorLogin);
-    }
-
-    /**
-     * 修改状态栏颜色
-     *
-     * @param activity
-     * @param colorId
-     */
-    public void setStatusBarColor(Activity activity, int colorId) {
-        Window window = activity.getWindow();
-        window.setStatusBarColor(activity.getResources().getColor(colorId));
+        setStatusBarColor(R.color.colorLogin);
     }
 
     private void setData() {
@@ -83,7 +70,7 @@ public class LoginActivity extends BaseActivity {
                     SPUtils.getInstance(BTConstant.SP_NAME).put(BTConstant.SP_KEY_USERNAME, username);
                     SPUtils.getInstance(BTConstant.SP_NAME).put(BTConstant.SP_KEY_PASSWORD, pwd);
 
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, NavActivity.class);
                     startActivity(intent);
                     finish();
                 }

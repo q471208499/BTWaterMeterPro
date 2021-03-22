@@ -51,8 +51,6 @@ public class MainActivity extends BleBaseActivity {
         setContentView(R.layout.activity_main);
         initBarView();
         bindView();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-
         chronometer = findViewById(R.id.main_chronometer);
     }
 
