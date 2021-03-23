@@ -9,11 +9,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.fastjson.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.cb.baselibrary.fragment.BaseFragment;
 import cn.cb.baselibrary.widget.MyDividerItemDecoration;
+import cn.cb.btwatermeterpro.BTApplication;
 import cn.cb.btwatermeterpro.R;
 import cn.cb.btwatermeterpro.activity.AboutActivity;
 import cn.cb.btwatermeterpro.adapter.MyAdapter;
@@ -33,11 +36,9 @@ public class MyFragment extends BaseFragment {
     }
 
     private void initData() {
-        /*AppUserBean appUserBean = BTCRApplication.getAppUserBean();
-        if (appUserBean != null) {
-            name.setText(appUserBean.getName());
-            subName.setText(appUserBean.getOrgName());
-        }*/
+        JSONObject user = BTApplication.getUser();
+        String userName = user.getJSONObject("meterInfo").getString("userName");
+        name.setText(userName);
     }
 
     private void bindView(View root) {
@@ -51,7 +52,6 @@ public class MyFragment extends BaseFragment {
 
     private List<CommonBean> getList() {
         List<CommonBean> list = new ArrayList<>();
-        /*list.add(new CommonBean(0, "服务器设置", R.mipmap.ic_setting, HostSettingActivity.class));*/
         list.add(new CommonBean(2, "关于", R.mipmap.ic_about, AboutActivity.class));
         list.add(new CommonBean(ITEM_ID_EXIT, "退出登录", R.mipmap.ic_exit, null));
         return list;

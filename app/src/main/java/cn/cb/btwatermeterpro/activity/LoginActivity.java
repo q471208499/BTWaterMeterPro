@@ -7,7 +7,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 
-import java.util.Map;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 
 import cn.cb.baselibrary.activity.BaseActivity;
 import cn.cb.baselibrary.net.Result;
@@ -17,6 +18,7 @@ import cn.cb.baselibrary.utils.ABTimeUtils;
 import cn.cb.baselibrary.utils.AppUpdateHelper;
 import cn.cb.baselibrary.utils.MD5;
 import cn.cb.baselibrary.utils.SPUtils;
+import cn.cb.btwatermeterpro.BTApplication;
 import cn.cb.btwatermeterpro.BuildConfig;
 import cn.cb.btwatermeterpro.R;
 import cn.cb.btwatermeterpro.net.RequestUtils;
@@ -61,9 +63,8 @@ public class LoginActivity extends BaseActivity {
                 Result result = (Result) responseObj;
                 MyToast.show(result.getMessage());
                 if (result.isSuccess()) {
-                    Map<String, Object> m = (Map<String, Object>) result.getData();
-                    /*AppUser appUser = JSONObject.toJavaObject(new JSONObject(m), AppUser.class);
-                    BTApplication.setAppUser(appUser);*/
+                    JSONObject jsonObject = JSON.parseObject(result.getData().toString());
+                    BTApplication.setUser(jsonObject);
 
                     String pwd = loginPwd.getText().toString();
                     String username = loginName.getText().toString();
@@ -74,8 +75,6 @@ public class LoginActivity extends BaseActivity {
                     startActivity(intent);
                     finish();
                 }
-            } else {
-                MyToast.show(R.string.server_error);
             }
         }
     };
