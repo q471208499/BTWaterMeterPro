@@ -1,7 +1,5 @@
 package cn.cb.btwatermeterpro.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 
 import cn.cb.baselibrary.activity.BaseActivity;

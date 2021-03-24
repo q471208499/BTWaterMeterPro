@@ -11,6 +11,9 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import cn.cb.baselibrary.activity.BaseActivity;
+import cn.cb.baselibrary.utils.ABTimeUtils;
+import cn.cb.baselibrary.utils.AppUpdateHelper;
+import cn.cb.btwatermeterpro.BuildConfig;
 import cn.cb.btwatermeterpro.R;
 
 public class NavActivity extends BaseActivity {
@@ -30,6 +33,7 @@ public class NavActivity extends BaseActivity {
         NavigationUI.setupWithNavController(navView, navController);
         setStatusBarColor(android.R.color.white);
         getSupportActionBar().hide();
+        new AppUpdateHelper(BuildConfig.UPDATE_URL + "?" + ABTimeUtils.getCurrentTimeInString()).getUpdateInfo();
     }
 
     @Override
