@@ -2,7 +2,7 @@
 <project version="4">
   <component name="DBNavigator.Project.DataEditorManager">
     <record-view-column-sorting-type value="BY_INDEX" />
-    <value-preview-text-wrapping value="true" />
+    <value-preview-text-wrapping value="false" />
     <value-preview-pinned value="false" />
   </component>
   <component name="DBNavigator.Project.DataExportManager">
@@ -26,13 +26,13 @@
     <show-object-properties value="true" />
     <loaded-nodes>
       <connection connection-id="c401196e-9a86-43b0-b0c5-787a5022bb97">
-        <schema name="main" object-types="view, table" />
+        <schema name="main" object-types="dataset trigger, view, constraint, column, table, index" />
       </connection>
     </loaded-nodes>
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="c401196e-9a86-43b0-b0c5-787a5022bb97">
-      <console name="Connection 1" type="STANDARD" schema="main" session="Main"><![CDATA[select * from  READ_RECORD]]></console>
+      <console name="Connection 1" type="STANDARD" schema="main" session="Main">select * from  READ_RECORD</console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
@@ -40,6 +40,10 @@
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="c401196e-9a86-43b0-b0c5-787a5022bb97" />
+  </component>
+  <component name="DBNavigator.Project.DatasetFilterManager">
+    <filter-actions connection-id="c401196e-9a86-43b0-b0c5-787a5022bb97" dataset="main.READ_RECORD" active-filter-id="" />
+    <filter-actions connection-id="c401196e-9a86-43b0-b0c5-787a5022bb97" dataset="main.sqlite_sequence" active-filter-id="" />
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
     <last-used-providers />

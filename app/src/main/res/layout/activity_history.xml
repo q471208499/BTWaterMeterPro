@@ -6,6 +6,153 @@
     android:layout_height="match_parent"
     tools:context=".activity.HistoryActivity">
 
-    <include layout="@layout/tool_bar"/>
+    <include layout="@layout/tool_bar" />
+
+    <TextView
+        android:id="@+id/his_search_key"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="水表编号："
+        app:layout_constraintBottom_toBottomOf="@id/his_search_value"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/his_search_value" />
+
+    <SearchView
+        android:id="@+id/his_search_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:iconifiedByDefault="false"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tool_bar_view" />
+
+    <TextView
+        android:id="@+id/his_query_type_key"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="查询方式："
+        app:layout_constraintBaseline_toBaselineOf="@id/his_query_type_value"
+        app:layout_constraintLeft_toLeftOf="@id/his_search_key" />
+
+    <Spinner
+        android:id="@+id/his_query_type_value"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintLeft_toRightOf="@id/his_query_type_key"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/his_search_value"
+        tools:listitem="@layout/support_simple_spinner_dropdown_item" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/his_date_picker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/his_query_type_value">
+
+        <TextView
+            android:id="@+id/his_date_picker_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="2021-3-25"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBaseline_toBaselineOf="@id/his_btn_next"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/his_btn_last" />
+
+        <Button
+            android:id="@+id/his_btn_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:text="后一天"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/his_btn_last"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:text="前一天"
+            app:layout_constraintRight_toLeftOf="@id/his_btn_next"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/his_date_pickers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/his_date_picker">
+
+        <TextView
+            android:id="@+id/his_date_picker_a"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="2021-3-25"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBaseline_toBaselineOf="@id/his_btn_search"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/his_date_" />
+
+        <TextView
+            android:id="@+id/his_date_"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="至"
+            app:layout_constraintBaseline_toBaselineOf="@id/his_btn_search"
+            app:layout_constraintLeft_toRightOf="@id/his_date_picker_a"
+            app:layout_constraintRight_toLeftOf="@id/his_date_picker_b" />
+
+        <TextView
+            android:id="@+id/his_date_picker_b"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="2021-3-25"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBaseline_toBaselineOf="@id/his_btn_search"
+            app:layout_constraintLeft_toRightOf="@id/his_date_"
+            app:layout_constraintRight_toLeftOf="@id/his_btn_search" />
+
+        <Button
+            android:id="@+id/his_btn_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:text="查询"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/his_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="8dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/his_date_pickers" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

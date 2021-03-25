@@ -47,8 +47,8 @@ public class DbManager {
                     "  \"ID\" INTEGER NOT NULL DEFAULT 0 PRIMARY KEY AUTOINCREMENT,\n" +//主键
                     "  \"METERADDRESS\" TEXT NOT NULL,\n" +//水表编号
                     "  \"USER_ID\" TEXT NOT NULL,\n" +//用户id
-                    "  \"READ_DATE\" TEXT,\n" +//抄表日期
-                    "  \"READ_TIME\" TEXT,\n" +//抄表时间
+                    "  \"READ_DATE\" DATE,\n" +//抄表日期
+                    "  \"READ_TIME\" TIME,\n" +//抄表时间
                     "  \"READ_NUMBER\" INTEGER DEFAULT 0,\n" +//抄表读数
                     "  \"FLOW\" INTEGER DEFAULT 0,\n" +//用量
                     "  \"READ_HEX\" TEXT\n" +//抄表报文

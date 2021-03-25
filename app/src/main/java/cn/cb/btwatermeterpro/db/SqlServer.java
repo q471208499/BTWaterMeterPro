@@ -3,6 +3,9 @@ package cn.cb.btwatermeterpro.db;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cn.cb.baselibrary.utils.LogHelper;
 
 public class SqlServer {
@@ -15,19 +18,62 @@ public class SqlServer {
 
     public void getReadList() {
         try (SQLiteDatabase database = openHelper.getWritableDatabase()) {
-            String sql = "SELECT * FROM READ_RECORD";
+            String sql = "SELECT * FROM READ_RECORD ORDER BY READ_DATE DESC, READ_TIME DESC";
             LogHelper.i(TAG, "getReadList: " + sql);
             Cursor cursor = database.rawQuery(sql, null);
             while (cursor.moveToNext()) {
 
             }
+            cursor.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    public void testData() {
+        SQLiteDatabase database = openHelper.getWritableDatabase();
+        try {
+            database.beginTransaction();
+            List<String> sqlList = new ArrayList<>();
+            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', 'GQR', '2021-3-25', '10:21:50', 1111, 111, '333AA')");
+            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', 'GQR', '2021-3-25', '10:11:50', 1110, 110, '333AA')");
+            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', 'GQR', '2021-3-25', '10:01:50', 1109, 109, '333AA')");
+            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', 'GQR', '2021-3-24', '10:21:50', 1108, 108, '333AA')");
+            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', 'GQR', '2021-3-24', '10:11:50', 1107, 107, '333AA')");
+            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', 'GQR', '2021-3-24', '10:01:50', 1105, 105, '333AA')");
+            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', 'GQR', '2021-3-23', '10:21:50', 1104, 104, '333AA')");
+            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', 'GQR', '2021-3-23', '10:11:50', 1103, 103, '333AA')");
+            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', 'GQR', '2021-3-23', '10:01:50', 1102, 102, '333AA')");
+            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', 'GQR', '2021-3-22', '10:21:50', 1101, 101, '333AA')");
+            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', 'GQR', '2021-3-22', '10:11:50', 1100, 100, '333AA')");
+            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', 'GQR', '2021-3-22', '10:01:50', 1099, 99, '333AA')");
+            for (String s : sqlList) {
+                LogHelper.i(TAG, "testData: " + s);
+                database.execSQL(s);
+            }
+            database.setTransactionSuccessful();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        database.endTransaction();
+        database.close();
+    }
+/*
+select * from read_record;
+
+insert into read_record(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX)
+values('1111', 'GQR', '2021-3-25', '10:21:50', 1111, 111, '333aa');
+
+insert into read_record(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX)
+values('1111', 'GQR', '2021-3-26', '10:21:50', 1111, 111, '333aa');
+
+insert into read_record(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX)
+values('1111', 'GQR', '2021-3-24', '10:21:50', 1111, 111, '333aa');
+
+select * from read_record where READ_DATE between '2021-3-24' and '2021-3-25';
+ */
     /*public void addBooks(List<BookResultBean> list) {
-        SQLiteDatabase database = sqlHelper.getWritableDatabase();
+        SQLiteDatabase database = openHelper.getWritableDatabase();
         try {
             database.beginTransaction();
             String createTime = ABTimeUtils.getCurrentTimeInString(DEFAULT_DATE_FORMAT);
@@ -47,7 +93,7 @@ public class SqlServer {
     }
 
     public boolean dropTable() {
-        try (SQLiteDatabase database = sqlHelper.getWritableDatabase()) {
+        try (SQLiteDatabase database = openHelper.getWritableDatabase()) {
             String sql = "DROP TABLE BOOK";
             LogHelper.i(TAG, "dropTable: " + sql);
             database.execSQL(sql);
@@ -60,7 +106,7 @@ public class SqlServer {
     }
 
     public boolean cleanBooks() {
-        try (SQLiteDatabase database = sqlHelper.getWritableDatabase()) {
+        try (SQLiteDatabase database = openHelper.getWritableDatabase()) {
             String sql = "DELETE FROM BOOK";
             LogHelper.i(TAG, "cleanBooks: " + sql);
             database.execSQL(sql);
@@ -87,7 +133,7 @@ public class SqlServer {
 
     public List<BookListItemBean> getAllBooks() {
         List<BookListItemBean> list = new ArrayList<>();
-        try (SQLiteDatabase database = sqlHelper.getWritableDatabase()) {
+        try (SQLiteDatabase database = openHelper.getWritableDatabase()) {
             String sql = "SELECT B.NAME, B.CREATE_TIME, COUNT(B.NAME) AS N, SR.STATUS\n" +
                     "FROM BOOK B\n" +
                     "LEFT JOIN SCRIBE_RECORD SR ON SR.METERADDRESS = B.METERADDRESS\n" +
