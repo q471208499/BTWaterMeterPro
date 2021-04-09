@@ -6,6 +6,253 @@
     android:layout_height="match_parent"
     tools:context=".activity.SettingActivity">
 
-    <include layout="@layout/tool_bar"/>
+    <include layout="@layout/tool_bar" />
+
+    <TextView
+        android:id="@+id/setting_meter_address_src_key"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="22dp"
+        android:text="　原地址"
+        app:layout_constraintBaseline_toBaselineOf="@id/setting_meter_address_src_value"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <EditText
+        android:id="@+id/setting_meter_address_src_value"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="22dp"
+        android:background="@drawable/input_not_editable"
+        android:editable="false"
+        android:maxLines="1"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:text="1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"
+        app:layout_constraintLeft_toRightOf="@id/setting_meter_address_src_key"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tool_bar_view" />
+
+    <TextView
+        android:id="@+id/setting_meter_address_target_key"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="22dp"
+        android:text="　新地址"
+        app:layout_constraintBaseline_toBaselineOf="@id/setting_meter_address_target_value"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <EditText
+        android:id="@+id/setting_meter_address_target_value"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="22dp"
+        android:background="@drawable/input_editable"
+        android:inputType="number"
+        android:minLines="1"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:text="1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"
+        app:layout_constraintLeft_toRightOf="@id/setting_meter_address_target_key"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/setting_meter_address_src_value" />
+
+    <TextView
+        android:id="@+id/setting_init_number_key"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="22dp"
+        android:text="初始读数"
+        app:layout_constraintBaseline_toBaselineOf="@id/setting_init_number_value"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <EditText
+        android:id="@+id/setting_init_number_value"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="22dp"
+        android:background="@drawable/input_editable"
+        android:inputType="number"
+        android:minLines="1"
+        android:paddingStart="8dp"
+        android:paddingEnd="30dp"
+        android:text="1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"
+        app:layout_constraintLeft_toRightOf="@id/setting_init_number_key"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/setting_meter_address_target_value" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="m³"
+        app:layout_constraintBaseline_toBaselineOf="@id/setting_init_number_value"
+        app:layout_constraintRight_toRightOf="@id/setting_init_number_value" />
+
+    <TextView
+        android:id="@+id/setting_send_key"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="22dp"
+        android:text="发送周期"
+        app:layout_constraintBaseline_toBaselineOf="@id/setting_send_value"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <EditText
+        android:id="@+id/setting_send_value"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="22dp"
+        android:background="@drawable/input_editable"
+        android:inputType="number"
+        android:minLines="1"
+        android:paddingStart="8dp"
+        android:paddingEnd="30dp"
+        android:text="1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"
+        app:layout_constraintLeft_toRightOf="@id/setting_send_key"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/setting_init_number_value" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="秒"
+        app:layout_constraintBaseline_toBaselineOf="@id/setting_send_value"
+        app:layout_constraintRight_toRightOf="@id/setting_send_value" />
+
+    <TextView
+        android:id="@+id/setting_time_key"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="22dp"
+        android:text="校时周期"
+        app:layout_constraintBaseline_toBaselineOf="@id/setting_time_value"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <EditText
+        android:id="@+id/setting_time_value"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="22dp"
+        android:background="@drawable/input_editable"
+        android:inputType="number"
+        android:minLines="1"
+        android:paddingStart="8dp"
+        android:paddingEnd="30dp"
+        android:text="1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"
+        app:layout_constraintLeft_toRightOf="@id/setting_time_key"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/setting_send_value" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="秒"
+        app:layout_constraintBaseline_toBaselineOf="@id/setting_time_value"
+        app:layout_constraintRight_toRightOf="@id/setting_time_value" />
+
+    <TextView
+        android:id="@+id/setting_index_code_key"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="22dp"
+        android:text="　序列号"
+        app:layout_constraintBaseline_toBaselineOf="@id/setting_index_code_value"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <EditText
+        android:id="@+id/setting_index_code_value"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="22dp"
+        android:background="@drawable/input_not_editable"
+        android:editable="false"
+        android:maxLines="1"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:text="1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"
+        app:layout_constraintLeft_toRightOf="@id/setting_index_code_key"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/setting_time_value" />
+
+    <TextView
+        android:id="@+id/setting_version_key"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="22dp"
+        android:text="软件版本"
+        app:layout_constraintBaseline_toBaselineOf="@id/setting_version_value"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <EditText
+        android:id="@+id/setting_version_value"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="22dp"
+        android:background="@drawable/input_not_editable"
+        android:editable="false"
+        android:maxLines="1"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:text="1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"
+        app:layout_constraintLeft_toRightOf="@id/setting_version_key"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/setting_index_code_value" />
+
+    <Button
+        android:id="@+id/setting_btn_read"
+        android:layout_width="0dp"
+        android:layout_height="42dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/selector_fillet_btn"
+        android:gravity="center"
+        android:text="参数读取"
+        android:textColor="@android:color/white"
+        android:textSize="18dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/setting_btn_set"
+        app:layout_constraintTop_toBottomOf="@id/setting_version_value" />
+
+    <Button
+        android:id="@+id/setting_btn_set"
+        android:layout_width="0dp"
+        android:layout_height="42dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/selector_fillet_btn_red"
+        android:gravity="center"
+        android:text="参数设置"
+        android:textColor="@android:color/white"
+        android:textSize="18dp"
+        app:layout_constraintLeft_toRightOf="@id/setting_btn_read"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/setting_version_value" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginBottom="10dp"
+        android:src="@mipmap/logo_company"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -46,7 +46,7 @@ public class HomeFragment extends BaseFragment {
         list.add(new CommonBean(1, "及时抄表", R.mipmap.ic_home_now, MainActivity.class));
         list.add(new CommonBean(2, "历史查询", R.mipmap.ic_home_his, HistoryActivity.class));
         list.add(new CommonBean(3, "数据补抄", R.mipmap.ic_home_patch, PatchActivity.class));
-        list.add(new CommonBean(4, "水表设置", R.mipmap.ic_home_setting, SettingActivity.class));
+        list.add(new CommonBean(4, "仪表设置", R.mipmap.ic_home_setting, SettingActivity.class));
         return list;
     }
 

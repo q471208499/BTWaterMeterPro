@@ -64,16 +64,7 @@ public class LoginActivity extends BaseActivity {
                 MyToast.show(result.getMessage());
                 if (result.isSuccess()) {
                     JSONObject jsonObject = JSON.parseObject(result.getData().toString());
-                    BTApplication.setUser(jsonObject);
-
-                    String pwd = loginPwd.getText().toString();
-                    String username = loginName.getText().toString();
-                    SPUtils.getInstance(BTConstant.SP_NAME).put(BTConstant.SP_KEY_USERNAME, username);
-                    SPUtils.getInstance(BTConstant.SP_NAME).put(BTConstant.SP_KEY_PASSWORD, pwd);
-
-                    Intent intent = new Intent(LoginActivity.this, NavActivity.class);
-                    startActivity(intent);
-                    finish();
+                    loginSuccess(jsonObject);
                 }
             }
         }
@@ -92,7 +83,29 @@ public class LoginActivity extends BaseActivity {
         }
         showLoading();
         String pwdMd5 = new MD5().getMD5ofStr(loginPwd.getText().toString());
-        RequestUtils.doLogin(loginName.getText().toString(), pwdMd5, callback);
+        if (BuildConfig.DEBUG) {
+            dismissLoading();
+            JSONObject jsonObject = new JSONObject();
+            JSONObject jsonUser = new JSONObject();
+            jsonUser.put("userName", loginName.getText().toString());
+            jsonObject.put("meterInfo", jsonUser);
+            loginSuccess(jsonObject);
+        } else {
+            RequestUtils.doLogin(loginName.getText().toString(), pwdMd5, callback);
+        }
+    }
+
+    private void loginSuccess(JSONObject jsonObject) {
+        BTApplication.setUser(jsonObject);
+
+        String pwd = loginPwd.getText().toString();
+        String username = loginName.getText().toString();
+        SPUtils.getInstance(BTConstant.SP_NAME).put(BTConstant.SP_KEY_USERNAME, username);
+        SPUtils.getInstance(BTConstant.SP_NAME).put(BTConstant.SP_KEY_PASSWORD, pwd);
+
+        Intent intent = new Intent(LoginActivity.this, NavActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override

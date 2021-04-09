@@ -3,10 +3,14 @@ package cn.cb.btwatermeterpro.db;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.cb.baselibrary.utils.LogHelper;
+import cn.cb.btwatermeterpro.BTApplication;
 
 public class SqlServer {
     private final String TAG = getClass().getSimpleName();
@@ -16,18 +20,38 @@ public class SqlServer {
         openHelper = helper;
     }
 
-    public void getReadList() {
+
+    public JSONArray getReadList(String meterAddress, String date) {
+        return getReadList(meterAddress, date, date);
+    }
+
+    public JSONArray getReadList(String meterAddress, String startDate, String endDate) {
+        JSONArray array = new JSONArray();
         try (SQLiteDatabase database = openHelper.getWritableDatabase()) {
-            String sql = "SELECT * FROM READ_RECORD ORDER BY READ_DATE DESC, READ_TIME DESC";
+            String sql = "SELECT *\n" +
+                    "  FROM READ_RECORD\n" +
+                    " WHERE USER_ID = '" + BTApplication.getUser().getJSONObject("meterInfo").getString("userName") + "' AND \n" +
+                    "       METERADDRESS = '" + meterAddress + "' AND \n" +
+                    "       READ_DATE BETWEEN '" + startDate + "' AND '" + endDate + "'\n" +
+                    " ORDER BY READ_DATE DESC,\n" +
+                    "          READ_TIME DESC";
             LogHelper.i(TAG, "getReadList: " + sql);
             Cursor cursor = database.rawQuery(sql, null);
             while (cursor.moveToNext()) {
-
+                JSONObject object = new JSONObject();
+                String time = cursor.getString(cursor.getColumnIndex("READ_TIME"));
+                String readNumber = cursor.getString(cursor.getColumnIndex("READ_NUMBER"));
+                String flow = cursor.getString(cursor.getColumnIndex("FLOW"));
+                object.put("time", time);
+                object.put("readNumber", readNumber);
+                object.put("flow", flow);
+                array.add(object);
             }
             cursor.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return array;
     }
 
     public void testData() {
@@ -35,18 +59,18 @@ public class SqlServer {
         try {
             database.beginTransaction();
             List<String> sqlList = new ArrayList<>();
-            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', 'GQR', '2021-3-25', '10:21:50', 1111, 111, '333AA')");
-            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', 'GQR', '2021-3-25', '10:11:50', 1110, 110, '333AA')");
-            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', 'GQR', '2021-3-25', '10:01:50', 1109, 109, '333AA')");
-            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', 'GQR', '2021-3-24', '10:21:50', 1108, 108, '333AA')");
-            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', 'GQR', '2021-3-24', '10:11:50', 1107, 107, '333AA')");
-            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', 'GQR', '2021-3-24', '10:01:50', 1105, 105, '333AA')");
-            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', 'GQR', '2021-3-23', '10:21:50', 1104, 104, '333AA')");
-            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', 'GQR', '2021-3-23', '10:11:50', 1103, 103, '333AA')");
-            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', 'GQR', '2021-3-23', '10:01:50', 1102, 102, '333AA')");
-            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', 'GQR', '2021-3-22', '10:21:50', 1101, 101, '333AA')");
-            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', 'GQR', '2021-3-22', '10:11:50', 1100, 100, '333AA')");
-            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', 'GQR', '2021-3-22', '10:01:50', 1099, 99, '333AA')");
+            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', '" + BTApplication.getUser().getJSONObject("meterInfo").getString("userName") + "', '2021-3-25', '10:21:50', 1111, 111, '333AA')");
+            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', '" + BTApplication.getUser().getJSONObject("meterInfo").getString("userName") + "', '2021-3-25', '10:11:50', 1110, 110, '333AA')");
+            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', '" + BTApplication.getUser().getJSONObject("meterInfo").getString("userName") + "', '2021-3-25', '10:01:50', 1109, 109, '333AA')");
+            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', '" + BTApplication.getUser().getJSONObject("meterInfo").getString("userName") + "', '2021-3-24', '10:21:50', 1108, 108, '333AA')");
+            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', '" + BTApplication.getUser().getJSONObject("meterInfo").getString("userName") + "', '2021-3-24', '10:11:50', 1107, 107, '333AA')");
+            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', '" + BTApplication.getUser().getJSONObject("meterInfo").getString("userName") + "', '2021-3-24', '10:01:50', 1105, 105, '333AA')");
+            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', '" + BTApplication.getUser().getJSONObject("meterInfo").getString("userName") + "', '2021-3-23', '10:21:50', 1104, 104, '333AA')");
+            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', '" + BTApplication.getUser().getJSONObject("meterInfo").getString("userName") + "', '2021-3-23', '10:11:50', 1103, 103, '333AA')");
+            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', '" + BTApplication.getUser().getJSONObject("meterInfo").getString("userName") + "', '2021-3-23', '10:01:50', 1102, 102, '333AA')");
+            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', '" + BTApplication.getUser().getJSONObject("meterInfo").getString("userName") + "', '2021-3-22', '10:21:50', 1101, 101, '333AA')");
+            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', '" + BTApplication.getUser().getJSONObject("meterInfo").getString("userName") + "', '2021-3-22', '10:11:50', 1100, 100, '333AA')");
+            sqlList.add("INSERT INTO READ_RECORD(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX) VALUES('1111', '" + BTApplication.getUser().getJSONObject("meterInfo").getString("userName") + "', '2021-3-22', '10:01:50', 1099, 99, '333AA')");
             for (String s : sqlList) {
                 LogHelper.i(TAG, "testData: " + s);
                 database.execSQL(s);
@@ -62,13 +86,13 @@ public class SqlServer {
 select * from read_record;
 
 insert into read_record(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX)
-values('1111', 'GQR', '2021-3-25', '10:21:50', 1111, 111, '333aa');
+values('1111', '" + BTApplication.getUser().getJSONObject("meterInfo").getString("userName") + "', '2021-3-25', '10:21:50', 1111, 111, '333aa');
 
 insert into read_record(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX)
-values('1111', 'GQR', '2021-3-26', '10:21:50', 1111, 111, '333aa');
+values('1111', '" + BTApplication.getUser().getJSONObject("meterInfo").getString("userName") + "', '2021-3-26', '10:21:50', 1111, 111, '333aa');
 
 insert into read_record(METERADDRESS, USER_ID, READ_DATE, READ_TIME, READ_NUMBER, FLOW, READ_HEX)
-values('1111', 'GQR', '2021-3-24', '10:21:50', 1111, 111, '333aa');
+values('1111', '" + BTApplication.getUser().getJSONObject("meterInfo").getString("userName") + "', '2021-3-24', '10:21:50', 1111, 111, '333aa');
 
 select * from read_record where READ_DATE between '2021-3-24' and '2021-3-25';
  */

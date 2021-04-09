@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/his_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingLeft="18dp"
+        android:text="00:00"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/his_read_number"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/his_read_number"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
+        android:text="108.010"
+        app:layout_constraintBaseline_toBaselineOf="@id/his_time"
+        app:layout_constraintLeft_toRightOf="@id/his_time"
+        app:layout_constraintRight_toLeftOf="@id/his_flow" />
+
+    <TextView
+        android:id="@+id/his_flow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
+        android:text="0.005"
+        app:layout_constraintBaseline_toBaselineOf="@id/his_time"
+        app:layout_constraintLeft_toRightOf="@id/his_read_number"
+        app:layout_constraintRight_toRightOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

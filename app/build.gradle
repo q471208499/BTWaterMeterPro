@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "cn.cb.btwatermeterpro"
-        minSdkVersion 22
+        minSdkVersion 24
         targetSdkVersion 30
         versionCode 108
         versionName "1.0.8"
