@@ -16,5 +16,5 @@
     <color name="colorPass">#e5e5e5</color>
     <color name="colorRedPass">#DF3D3B</color>
     <color name="lighter_gray">#ddd</color>
-
+    <color name="colorGrey">#C1B7B7</color>
 </resources>

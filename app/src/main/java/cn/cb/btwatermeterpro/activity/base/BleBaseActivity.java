@@ -1,4 +1,4 @@
-package cn.cb.btwatermeterpro.activity;
+package cn.cb.btwatermeterpro.activity.base;
 
 import android.Manifest;
 import android.app.AlertDialog;

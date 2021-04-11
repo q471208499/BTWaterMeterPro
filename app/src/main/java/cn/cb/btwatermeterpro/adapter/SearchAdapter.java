@@ -96,10 +96,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 
     public void addItem(BleDevice bleDevice) {
         BTProScan proScan = new BTProScan(bleDevice.getScanRecord());
-        if (BuildConfig.DEBUG) {
-            proScan = new BTProScan("14 68 01 30 17 B5 F3 C0 08 3E 1C 48 AC 00 00 00 00 78 00 E6 16");
-        }
         String scanMac = bleDevice.getMac();
+        /*if (BuildConfig.DEBUG) {
+            proScan = new BTProScan("14 68 01 30 17 B5 F3 C0 08 3E 1C 48 AC 00 00 00 00 78 00 E6 16");
+        }*/
         if (proScan.verify()) {
             for (int i = 0; i < list.size(); i++) {
                 Map<String, Object> item = list.get(i);
@@ -117,25 +117,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             map.put(KEY_TIMES, 1);
             map.put(KEY_MAC, scanMac);
             map.put(KEY_DATA, proScan);
-            map.put(KEY_RSSI, bleDevice.getRssi());
-            map.put(KEY_TIME, ABTimeUtils.getCurrentTimeInString());
-            list.add(map);
-            notifyItemChanged(list.size());
-        } else if (BuildConfig.DEBUG) {
-            for (int i = 0; i < list.size(); i++) {
-                Map<String, Object> item = list.get(i);
-                String itemMac = (String) item.get(KEY_MAC);
-                if (itemMac.equals(scanMac)) {
-                    item.put(KEY_TIMES, (int) item.get(KEY_TIMES) + 1);
-                    item.put(KEY_TIME, ABTimeUtils.getCurrentTimeInString());
-                    item.put(KEY_RSSI, bleDevice.getRssi());
-                    notifyItemChanged(i);
-                    return;
-                }
-            }
-            Map<String, Object> map = new HashMap<>();
-            map.put(KEY_TIMES, 1);
-            map.put(KEY_MAC, scanMac);
             map.put(KEY_RSSI, bleDevice.getRssi());
             map.put(KEY_TIME, ABTimeUtils.getCurrentTimeInString());
             list.add(map);

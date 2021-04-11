@@ -29,6 +29,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
 
 import cn.cb.btwatermeterpro.R;
+import cn.cb.btwatermeterpro.activity.base.BleBaseActivity;
 import cn.cb.btwatermeterpro.adapter.SearchAdapter;
 import es.dmoral.toasty.MyToast;
 
@@ -219,5 +220,12 @@ public class MainActivity extends BleBaseActivity {
         emptyView.setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
         TextView text = tipBar.findViewById(R.id.tip_text);
         text.setText("发现周边广播：" + times + " 次");
+    }
+
+    @Override
+    protected void onDestroy() {
+        BleManager.getInstance().cancelScan();
+        leScanner.stopScan(callback);
+        super.onDestroy();
     }
 }
