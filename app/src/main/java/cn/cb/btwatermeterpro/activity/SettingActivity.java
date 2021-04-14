@@ -392,13 +392,12 @@ public class SettingActivity extends SettingBaseActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         stopScan();
-
         try {
-            WCHBluetoothManager.getInstance().disconnect(false);
+            WCHBluetoothManager.getInstance().disconnect(true);
         } catch (BLELibException e) {
             e.printStackTrace();
         }
+        super.onDestroy();
     }
 }
