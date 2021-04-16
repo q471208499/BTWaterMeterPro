@@ -14,11 +14,29 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="水表编号："
-        app:layout_constraintBottom_toBottomOf="@id/his_search_value"
+        app:layout_constraintBottom_toBottomOf="@id/his_meter_address"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@id/his_search_value" />
+        app:layout_constraintTop_toTopOf="@id/his_meter_address" />
 
-    <SearchView
+    <EditText
+        android:id="@+id/his_meter_address"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="22dp"
+        android:background="@drawable/input_editable"
+        android:editable="false"
+        android:inputType="number"
+        android:minLines="1"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:text=""
+        app:layout_constraintLeft_toRightOf="@id/his_search_key"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tool_bar_view" />
+
+    <!--<SearchView
         android:id="@+id/his_search_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,13 +45,12 @@
         android:layout_marginRight="8dp"
         android:iconifiedByDefault="false"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tool_bar_view" />
+        app:layout_constraintTop_toBottomOf="@id/tool_bar_view" />-->
 
     <TextView
         android:id="@+id/his_query_type_key"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:text="查询方式："
         app:layout_constraintBaseline_toBaselineOf="@id/his_query_type_value"
         app:layout_constraintLeft_toLeftOf="@id/his_search_key" />
@@ -47,7 +64,7 @@
         android:layout_marginEnd="8dp"
         app:layout_constraintLeft_toRightOf="@id/his_query_type_key"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/his_search_value"
+        app:layout_constraintTop_toBottomOf="@id/his_meter_address"
         tools:listitem="@layout/support_simple_spinner_dropdown_item" />
 
     <androidx.constraintlayout.widget.ConstraintLayout

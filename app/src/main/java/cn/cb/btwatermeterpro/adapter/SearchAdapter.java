@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.clj.fastble.data.BleDevice;
-import com.clj.fastble.utils.BTProScan;
+import com.clj.fastble.project.blepro.BleProScan;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +19,6 @@ import java.util.Map;
 
 import cn.cb.baselibrary.utils.ABDateUtils;
 import cn.cb.baselibrary.utils.ABTimeUtils;
-import cn.cb.btwatermeterpro.BuildConfig;
 import cn.cb.btwatermeterpro.R;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchViewHolder> {
@@ -67,7 +66,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         holder.receiveTime.setText(time);
         holder.receiveTimes.setText(times + " 次");
         if (obj != null) {
-            BTProScan proScan = (BTProScan) obj;
+            BleProScan proScan = (BleProScan) obj;
             holder.totalFlow.setText(proScan.getFlow() + " m³");
             holder.voltage.setText(proScan.getVoltage() + " V");
             holder.contraryFlow.setText(proScan.getContrary() + " m³");
@@ -95,7 +94,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
     }
 
     public void addItem(BleDevice bleDevice) {
-        BTProScan proScan = new BTProScan(bleDevice.getScanRecord());
+        BleProScan proScan = new BleProScan(bleDevice.getScanRecord());
         String scanMac = bleDevice.getMac();
         /*if (BuildConfig.DEBUG) {
             proScan = new BTProScan("14 68 01 30 17 B5 F3 C0 08 3E 1C 48 AC 00 00 00 00 78 00 E6 16");
