@@ -189,16 +189,16 @@
         app:layout_constraintTop_toBottomOf="@id/setting_time_value" />
 
     <TextView
-        android:id="@+id/setting_version_key"
+        android:id="@+id/setting_hardware_key"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="22dp"
-        android:text="软件版本"
-        app:layout_constraintBaseline_toBaselineOf="@id/setting_version_value"
+        android:text="硬件日期"
+        app:layout_constraintBaseline_toBaselineOf="@id/setting_hardware_value"
         app:layout_constraintLeft_toLeftOf="parent" />
 
     <EditText
-        android:id="@+id/setting_version_value"
+        android:id="@+id/setting_hardware_value"
         android:layout_width="0dp"
         android:layout_height="38dp"
         android:layout_marginLeft="8dp"
@@ -210,9 +210,35 @@
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:text="1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"
-        app:layout_constraintLeft_toRightOf="@id/setting_version_key"
+        app:layout_constraintLeft_toRightOf="@id/setting_hardware_key"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/setting_index_code_value" />
+
+    <TextView
+        android:id="@+id/setting_software_key"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="22dp"
+        android:text="软件日期"
+        app:layout_constraintBaseline_toBaselineOf="@id/setting_software_value"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <EditText
+        android:id="@+id/setting_software_value"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="22dp"
+        android:background="@drawable/input_not_editable"
+        android:editable="false"
+        android:maxLines="1"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:text="1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"
+        app:layout_constraintLeft_toRightOf="@id/setting_software_key"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/setting_hardware_value" />
 
     <Button
         android:id="@+id/setting_btn_read"
@@ -228,7 +254,7 @@
         android:textSize="18dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/setting_btn_set"
-        app:layout_constraintTop_toBottomOf="@id/setting_version_value" />
+        app:layout_constraintTop_toBottomOf="@id/setting_software_value" />
 
     <Button
         android:id="@+id/setting_btn_set"
@@ -244,7 +270,7 @@
         android:textSize="18dp"
         app:layout_constraintLeft_toRightOf="@id/setting_btn_read"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/setting_version_value" />
+        app:layout_constraintTop_toBottomOf="@id/setting_software_value" />
 
     <Button
         android:id="@+id/setting_btn_connect"

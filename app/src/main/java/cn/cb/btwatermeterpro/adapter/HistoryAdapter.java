@@ -12,22 +12,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import java.util.Map;
+
 import cn.cb.btwatermeterpro.R;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HisViewHolder> {
 
     private Context mContext;
-    private JSONArray mArray;
+    private JSONArray mArray = new JSONArray();
 
     public HistoryAdapter(Context context) {
         mContext = context;
-    }
-
-    public void notifyDataSet(JSONArray array) {
-        if (mArray != null)
-            mArray.clear();
-        mArray = array;
-        notifyDataSetChanged();
     }
 
     @NonNull
@@ -48,6 +43,26 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HisViewH
     @Override
     public int getItemCount() {
         return mArray == null ? 0 : mArray.size();
+    }
+
+    public void addDataMap(Map<String, Object> dataMap) {
+        int[] increment = (int[]) dataMap.get("increment");
+        int[] readNumber = (int[]) dataMap.get("readNumber");
+
+        for (int i = 0; i < increment.length; i++) {
+            JSONObject object = new JSONObject();
+            object.put("time", (i + 1) + ":00");
+            object.put("readNumber", String.valueOf(readNumber[i]));
+            object.put("flow", String.valueOf(increment[i]));
+            mArray.add(object);
+            notifyItemInserted(mArray.size());
+        }
+    }
+
+    public boolean cleanDataMapList() {
+        mArray.clear();
+        notifyDataSetChanged();
+        return true;
     }
 
     class HisViewHolder extends RecyclerView.ViewHolder {

@@ -26,6 +26,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import cn.cb.baselibrary.activity.BaseActivity;
+import cn.cb.btwatermeterpro.BTApplication;
 import cn.cb.btwatermeterpro.ui.DeviceListDialog;
 import cn.cb.btwatermeterpro.ui.DialogUtil;
 import cn.wch.blelib.WCHBluetoothManager;
@@ -103,7 +104,7 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
 
 
     protected boolean checkConnected(String address) {
-
+        if (address == null || address.isEmpty()) return false;
         return WCHBluetoothManager.getInstance().isConnected(address);
     }
 
@@ -126,18 +127,6 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
             }
         });
     }
-
-    @Override
-    protected void onDestroy() {
-        stopScan();
-        try {
-            WCHBluetoothManager.getInstance().disconnect(false);
-        } catch (BLELibException e) {
-            e.printStackTrace();
-        }
-        super.onDestroy();
-    }
-
 
     protected void init() {
         rxPermissions = new RxPermissions(this);
@@ -200,9 +189,7 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
     /**
      * 蓝牙服务绑定后需要执行的操作
      */
-    protected void startTask() {
-
-    }
+    protected abstract void startTask();
 
     public static boolean isSupportBle(Context context) {
         PackageManager packageManager = context.getPackageManager();
@@ -241,6 +228,7 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
             MyToast.show("蓝牙连接成功");
             onConnectSuccess();
             setSpeedMonitor();
+            BTApplication.setConnectAddress(address);
         }
 
         @Override
@@ -259,6 +247,7 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
 
         @Override
         public void OnDisconnect(String mac, BluetoothDevice bluetoothDevice, int status) {
+            dismissLoading();
             LogUtil.d("连接回调：断开连接");
             cancelSpeedMonitor();
             MyToast.show("蓝牙断开连接");
@@ -276,6 +265,7 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
                     LogUtil.d("设置MTU大小失败");
                     MyToast.show("设置MTU大小失败");
                 }
+                allReady();
             });
         } catch (BLELibException e) {
             e.printStackTrace();
@@ -283,6 +273,10 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 连接，读写，通知，大小 全部设置完毕
+     */
+    protected abstract void allReady();
 
     /**
      * 监控和收发速度
@@ -331,8 +325,6 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
     //protected abstract void onDisconnect();
     protected boolean isConnected = false;
 
-    private List<BluetoothGattService> serviceList;
-
     private BluetoothGattCharacteristic receiveBGC;
 
     private DeviceListDialog deviceListDialog;
@@ -351,8 +343,9 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
 
     protected void onDiscoverService(List<BluetoothGattService> services) {
         LogUtil.d("onDiscoverService: " + services.size());
-        serviceList = services;
+        BTApplication.setServiceList(services);
         isConnected = true;
+
         runOnUiThread(() -> {
             isConnected = true;
             DialogUtil.getInstance().hideLoadingDialog();
@@ -518,12 +511,12 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
 
                     }
                 });*/
-                enableNotify(receiveBGC, true);
+                //enableNotify(receiveBGC, true);
+                enableNotify();
             } catch (BLELibException e) {
                 e.printStackTrace();
             }
         }
-
     }
 
     protected void enableNotify() {
@@ -540,6 +533,8 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
                     if (!b) {
                         emitter.onError(new Throwable("打开通知失败"));
                         return;
+                    } else {
+                        setMtu(100);
                     }
                 } else {
                     boolean b = WCHBluetoothManager.getInstance().closeNotify(characteristic);
@@ -613,7 +608,7 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
         UUID uuid1 = UUID.fromString(serviceUUID);
         UUID uuid2 = UUID.fromString(charUUID);
 
-        for (BluetoothGattService service : serviceList) {
+        for (BluetoothGattService service : BTApplication.getServiceList()) {
             if (service.getUuid().toString().equalsIgnoreCase(uuid1.toString())) {
                 return service.getCharacteristic(uuid2);
             }

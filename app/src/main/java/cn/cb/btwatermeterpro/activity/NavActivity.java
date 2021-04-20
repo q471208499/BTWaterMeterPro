@@ -16,9 +16,12 @@ import cn.cb.baselibrary.utils.AppUpdateHelper;
 import cn.cb.btwatermeterpro.BTApplication;
 import cn.cb.btwatermeterpro.BuildConfig;
 import cn.cb.btwatermeterpro.R;
+import cn.cb.btwatermeterpro.activity.base.BleConnectBaseActivity;
 import cn.cb.btwatermeterpro.db.DbManager;
+import cn.wch.blelib.WCHBluetoothManager;
+import cn.wch.blelib.exception.BLELibException;
 
-public class NavActivity extends BaseActivity {
+public class NavActivity extends BleConnectBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,42 @@ public class NavActivity extends BaseActivity {
         getSupportActionBar().hide();
         new AppUpdateHelper(BuildConfig.UPDATE_URL + "?" + ABTimeUtils.getCurrentTimeInString()).getUpdateInfo();
         if (BTApplication.FIRST) DbManager.getInstance().getSqlServer().testData();
+    }
+
+    @Override
+    protected void startTask() {
+        startScan();
+    }
+
+    @Override
+    protected void allReady() {
+
+    }
+
+    @Override
+    protected void onDiscoverService() {
+
+    }
+
+    @Override
+    protected void onConnectSuccess() {
+
+    }
+
+    @Override
+    protected void updateReadValue(byte[] data) {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        stopScan();
+        try {
+            WCHBluetoothManager.getInstance().disconnect(false);
+        } catch (BLELibException e) {
+            e.printStackTrace();
+        }
+        super.onDestroy();
     }
 
     @Override

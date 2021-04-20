@@ -17,9 +17,11 @@ import com.clj.fastble.utils.HexUtil;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 
 import cn.cb.baselibrary.utils.ABDateUtils;
 import cn.cb.baselibrary.widget.MyDividerItemDecoration;
+import cn.cb.btwatermeterpro.BTApplication;
 import cn.cb.btwatermeterpro.R;
 import cn.cb.btwatermeterpro.activity.base.BleConnectBaseActivity;
 import cn.cb.btwatermeterpro.adapter.HistoryAdapter;
@@ -39,7 +41,16 @@ public class HistoryActivity extends BleConnectBaseActivity {
         setContentView(R.layout.activity_history);
         initBarView();
         bindView();
-        getData();
+    }
+
+    @Override
+    protected void startTask() {
+
+    }
+
+    @Override
+    protected void allReady() {
+
     }
 
     @Override
@@ -55,10 +66,12 @@ public class HistoryActivity extends BleConnectBaseActivity {
     @Override
     protected void updateReadValue(byte[] data) {
         setLog("收：", data);
-    }
-
-    private void getData() {
-        //historyAdapter.notifyDataSet(DbManager.getInstance().getSqlServer().getReadList("1111", "2021-3-23", "2021-3-25"));
+        BleProHistory.Receive receive = new BleProHistory.Receive(HexUtil.formatHexString(data));
+        Map<String, Object> dataMap = receive.getDataMap();
+        historyAdapter.addDataMap(dataMap);
+        if (receive.getIndex() == 255) {
+            dismissLoading();
+        }
     }
 
     private void bindView() {
@@ -71,20 +84,25 @@ public class HistoryActivity extends BleConnectBaseActivity {
         pickerA = findViewById(R.id.his_date_picker_a);
         pickerB = findViewById(R.id.his_date_picker_b);
 
+        findViewById(R.id.his_btn_next).setOnClickListener(clickListener);
+        findViewById(R.id.his_btn_last).setOnClickListener(clickListener);
+        findViewById(R.id.his_btn_search).setOnClickListener(clickListener);
         picker1.setOnClickListener(clickListener);
         pickerA.setOnClickListener(clickListener);
         pickerB.setOnClickListener(clickListener);
         meterAddress.setOnClickListener(clickListener);
         meterAddress.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) startScan();
+            if (hasFocus) touchAddress();
         });
 
+        //===============================debug step log【Start】====================================
         log = findViewById(R.id.his_log);
         findViewById(R.id.his_btn_connect).setOnClickListener(clickListener);
         findViewById(R.id.his_btn_service).setOnClickListener(clickListener);
         findViewById(R.id.his_btn_notify).setOnClickListener(clickListener);
         findViewById(R.id.his_btn_mut).setOnClickListener(clickListener);
         findViewById(R.id.his_btn_write).setOnClickListener(clickListener);
+        //===============================debug step log【End】====================================
 
         picker1.setText(ABDateUtils.getCurDateStr(ABDateUtils.FORMAT_YMD));
         pickerA.setText(ABDateUtils.getCurDateStr(ABDateUtils.FORMAT_YMD));
@@ -100,6 +118,15 @@ public class HistoryActivity extends BleConnectBaseActivity {
         historyAdapter = new HistoryAdapter(this);
         recyclerView.setAdapter(historyAdapter);
         recyclerView.addItemDecoration(new MyDividerItemDecoration());
+    }
+
+    private void touchAddress() {
+        if (checkConnected(BTApplication.getConnectAddress())) {
+            meterAddress.setText(BTApplication.getConnectAddress() == null ? "" : BTApplication.getConnectAddress().replaceAll(":", ""));
+            startTest();
+        } else {
+            startScan();
+        }
     }
 
     private AdapterView.OnItemSelectedListener selectedListener = new AdapterView.OnItemSelectedListener() {
@@ -123,7 +150,7 @@ public class HistoryActivity extends BleConnectBaseActivity {
                 showPickDateDialog(v);
                 break;
             case R.id.his_meter_address:
-                startScan();
+                touchAddress();
                 break;
             case R.id.his_btn_connect:
                 startScan();
@@ -138,20 +165,49 @@ public class HistoryActivity extends BleConnectBaseActivity {
                 setMtu(100);
                 break;
             case R.id.his_btn_write:
-                if (!endCld.after(startCld)) {
-                    MyToast.show("截至时间有误！");
-                    return;
-                }
-                byte[] b = BleProHistory.getBytesDate(
-                        startCld.get(Calendar.YEAR),
-                        startCld.get(Calendar.MONTH) + 1,
-                        startCld.get(Calendar.DAY_OF_MONTH),
-                        differentDaysByMillisecond(startCld.getTime(), endCld.getTime()));
-                setLog("发：", b);
-                write(b);
+                getHisData();
+                break;
+            case R.id.his_btn_next:
+                startCld.add(Calendar.DAY_OF_MONTH, 1);
+                lastOrNext();
+                break;
+            case R.id.his_btn_last:
+                startCld.add(Calendar.DAY_OF_MONTH, -1);
+                lastOrNext();
+                break;
+            case R.id.his_btn_search:
+                getHisData();
                 break;
         }
     };
+
+    private void lastOrNext() {
+        int year = startCld.get(Calendar.YEAR);
+        int month = startCld.get(Calendar.MONTH);
+        int dayOfMonth = startCld.get(Calendar.DAY_OF_MONTH);
+        String s = year + "-" + (month + 1) + "-" + dayOfMonth;
+
+        picker1.setText(s);
+        endCld.set(year, month, dayOfMonth);
+        endCld.add(Calendar.DAY_OF_MONTH, 1);
+        getHisData();
+    }
+
+    private void getHisData() {
+        if (!endCld.after(startCld)) {
+            MyToast.show("截至时间有误！");
+            return;
+        }
+        showLoading();
+        historyAdapter.cleanDataMapList();
+        byte[] b = BleProHistory.getBytesDate(
+                startCld.get(Calendar.YEAR),
+                startCld.get(Calendar.MONTH) + 1,
+                startCld.get(Calendar.DAY_OF_MONTH),
+                differentDaysByMillisecond(startCld.getTime(), endCld.getTime()));
+        setLog("发：", b);
+        write(b);
+    }
 
     private void setLog(String flag, byte[] data) {
         String logStr = HexUtil.formatHexString(data, true);
@@ -177,6 +233,7 @@ public class HistoryActivity extends BleConnectBaseActivity {
                 endCld = Calendar.getInstance();
                 endCld.set(year, month, dayOfMonth);
                 endCld.add(Calendar.DAY_OF_MONTH, 1);
+                getHisData();
             } else if (v.getId() == R.id.his_date_picker_a) {
                 startCld = Calendar.getInstance();
                 startCld.set(year, month, dayOfMonth);
