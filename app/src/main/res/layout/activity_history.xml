@@ -36,17 +36,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tool_bar_view" />
 
-    <!--<SearchView
-        android:id="@+id/his_search_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="8dp"
-        android:iconifiedByDefault="false"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tool_bar_view" />-->
-
     <TextView
         android:id="@+id/his_query_type_key"
         android:layout_width="wrap_content"
@@ -169,12 +158,72 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <Button
+        android:id="@+id/his_btn_connect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1. 连接"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/his_btn_service"
+        app:layout_constraintTop_toBottomOf="@id/his_date_pickers" />
+
+    <Button
+        android:id="@+id/his_btn_service"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2. 获取服务"
+        app:layout_constraintLeft_toRightOf="@id/his_btn_connect"
+        app:layout_constraintRight_toLeftOf="@id/his_btn_notify"
+        app:layout_constraintTop_toTopOf="@id/his_btn_connect" />
+
+    <Button
+        android:id="@+id/his_btn_notify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="3. 打开通知"
+        app:layout_constraintLeft_toRightOf="@id/his_btn_service"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/his_btn_connect" />
+
+    <Button
+        android:id="@+id/his_btn_mut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="4. 设置mtu"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/his_btn_write"
+        app:layout_constraintTop_toBottomOf="@id/his_btn_connect" />
+
+    <Button
+        android:id="@+id/his_btn_write"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="5. 获取历史"
+        app:layout_constraintLeft_toRightOf="@id/his_btn_mut"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/his_btn_connect" />
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/his_btn_mut">
+
+        <TextView
+            android:id="@+id/his_log"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp" />
+    </ScrollView>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="12dp"
         android:background="@drawable/input_editable"
         android:padding="8dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/his_date_pickers">

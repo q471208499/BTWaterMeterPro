@@ -246,7 +246,76 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/setting_version_value" />
 
+    <Button
+        android:id="@+id/setting_btn_connect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1. 连接"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/setting_btn_service"
+        app:layout_constraintTop_toBottomOf="@id/setting_btn_read" />
+
+    <Button
+        android:id="@+id/setting_btn_service"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2. 获取服务"
+        app:layout_constraintLeft_toRightOf="@id/setting_btn_connect"
+        app:layout_constraintRight_toLeftOf="@id/setting_btn_notify"
+        app:layout_constraintTop_toBottomOf="@id/setting_btn_read" />
+
+    <Button
+        android:id="@+id/setting_btn_notify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="3. 打开通知"
+        app:layout_constraintLeft_toRightOf="@id/setting_btn_service"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/setting_btn_read" />
+
+    <Button
+        android:id="@+id/setting_btn_mut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="4. 设置mtu"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/setting_btn_write"
+        app:layout_constraintTop_toBottomOf="@id/setting_btn_connect" />
+
+    <Button
+        android:id="@+id/setting_btn_write"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="5. 获取参数"
+        app:layout_constraintLeft_toRightOf="@id/setting_btn_mut"
+        app:layout_constraintRight_toLeftOf="@id/setting_btn_set_test"
+        app:layout_constraintTop_toBottomOf="@id/setting_btn_connect" />
+
+    <Button
+        android:id="@+id/setting_btn_set_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="6. 参数设置"
+        app:layout_constraintLeft_toRightOf="@id/setting_btn_write"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/setting_btn_connect" />
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/setting_logo"
+        app:layout_constraintTop_toBottomOf="@id/setting_btn_mut">
+
+        <TextView
+            android:id="@+id/setting_log"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp" />
+    </ScrollView>
+
     <ImageView
+        android:id="@+id/setting_logo"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginBottom="10dp"

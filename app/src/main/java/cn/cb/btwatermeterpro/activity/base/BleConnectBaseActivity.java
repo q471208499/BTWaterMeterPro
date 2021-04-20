@@ -15,7 +15,6 @@ import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -34,14 +33,12 @@ import cn.wch.blelib.exception.BLELibException;
 import cn.wch.blelib.host.core.ConnRuler;
 import cn.wch.blelib.host.core.Connection;
 import cn.wch.blelib.host.core.callback.ConnectCallback;
-import cn.wch.blelib.host.core.callback.MTUCallback;
 import cn.wch.blelib.host.core.callback.NotifyDataCallback;
 import cn.wch.blelib.host.scan.ScanObserver;
 import cn.wch.blelib.utils.Location;
 import cn.wch.blelib.utils.LogUtil;
 import es.dmoral.toasty.MyToast;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -53,10 +50,15 @@ import io.reactivex.schedulers.Schedulers;
  * 此抽象类适用与CH9141相关的通信
  */
 public abstract class BleConnectBaseActivity extends BaseActivity {
+    //UUID: 00001800-0000-1000-8000-00805f9b34fb
+    //UUID: 6e400001-b5a3-f393-e0a9-e50e24dcca9f
+    //readCharacteristic() - uuid: 00002a00-0000-1000-8000-00805f9b34fb
+    private final String SERVER_UUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9f";
+    private final String SEND_UUID = "6e400002-b5a3-f393-e0a9-e50e24dcca9f";
+    private final String RECEIVE_UUID = "6e400003-b5a3-f393-e0a9-e50e24dcca9f";
 
     private RxPermissions rxPermissions;
     protected int REQUEST_BLUETOOTH_CODE = 111;
-    private Context context;
 
     protected String address;
 
@@ -127,12 +129,17 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
+        stopScan();
+        try {
+            WCHBluetoothManager.getInstance().disconnect(false);
+        } catch (BLELibException e) {
+            e.printStackTrace();
+        }
         super.onDestroy();
     }
 
 
     protected void init() {
-        context = this;
         rxPermissions = new RxPermissions(this);
     }
 
@@ -223,21 +230,25 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
 
         @Override
         public void OnConnecting(String mac) {
+            System.out.println("### OnConnecting");
             onConnecting();
         }
 
         @Override
         public void OnConnectSuccess(String mac, Connection connection) {
+            System.out.println("### OnConnectSuccess");
             address = mac;
             MyToast.show("蓝牙连接成功");
             onConnectSuccess();
             setSpeedMonitor();
-            startTest();
         }
 
         @Override
         public void OnDiscoverService(String mac, List<BluetoothGattService> list) {
+            System.out.println("### OnDiscoverService");
             onDiscoverService(list);
+            //startTest();
+            onDiscoverService();
         }
 
         @Override
@@ -255,20 +266,15 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
         }
     };
 
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     protected void setMtu(int mtu) {
         try {
-            WCHBluetoothManager.getInstance().setMTU(mtu, new MTUCallback() {
-                @Override
-                public void onMTUChanged(BluetoothGatt gatt, int mtu, int status) {
-                    if (status == BluetoothGatt.GATT_SUCCESS) {
-                        LogUtil.d("MTU大小设置为" + mtu);
-                        MyToast.show("MTU大小设置为" + mtu);
-                    } else {
-                        LogUtil.d("设置MTU大小失败");
-                        MyToast.show("设置MTU大小失败");
-                    }
+            WCHBluetoothManager.getInstance().setMTU(mtu, (gatt, mtu1, status) -> {
+                if (status == BluetoothGatt.GATT_SUCCESS) {
+                    LogUtil.d("MTU大小设置为" + mtu1);
+                    //MyToast.show("MTU大小设置为" + mtu1);
+                } else {
+                    LogUtil.d("设置MTU大小失败");
+                    MyToast.show("设置MTU大小失败");
                 }
             });
         } catch (BLELibException e) {
@@ -316,18 +322,18 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
 
     //protected abstract void onConnecting();
 
-    //protected abstract void onDiscoverService(List<BluetoothGattService> services);
+    protected abstract void onDiscoverService();
 
     protected abstract void onConnectSuccess();
 
     //protected abstract void onConnectError(String message);
 
     //protected abstract void onDisconnect();
-    private boolean isConnected = false;
+    protected boolean isConnected = false;
 
     private List<BluetoothGattService> serviceList;
 
-    private BluetoothGattCharacteristic currentCharacteristic;
+    private BluetoothGattCharacteristic receiveBGC;
 
     private DeviceListDialog deviceListDialog;
 
@@ -376,22 +382,22 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
 
     private void stopCurrentChar() {
         LogUtil.d("stop current char");
-        if (currentCharacteristic == null) {
+        /*if (sendBGC == null) {
             return;
         }
         //sbNotify.setOnCheckedChangeListener(null);
         //sbNotify.setChecked(false);
-        if ((currentCharacteristic.getProperties() & BluetoothGattCharacteristic.PROPERTY_NOTIFY) != 0) {
+        if ((sendBGC.getProperties() & BluetoothGattCharacteristic.PROPERTY_NOTIFY) != 0) {
             try {
-                if (WCHBluetoothManager.getInstance().getNotifyState(currentCharacteristic)) {
-                    WCHBluetoothManager.getInstance().openNotify(currentCharacteristic, null);
+                if (WCHBluetoothManager.getInstance().getNotifyState(sendBGC)) {
+                    WCHBluetoothManager.getInstance().openNotify(sendBGC, null);
                 }
             } catch (BLELibException e) {
                 e.printStackTrace();
                 LogUtil.d(e.getMessage());
             }
         }
-        currentCharacteristic = null;
+        sendBGC = null;*/
     }
 
     protected void startScan() {
@@ -490,22 +496,20 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
         stopCurrentChar();
     }
 
-    private void startTest() {
-        //TODO uuid
-        currentCharacteristic = getCurrentCharacteristic("", "");
-        if (currentCharacteristic == null) {
+    protected void startTest() {
+        receiveBGC = getCurrentCharacteristic(SERVER_UUID, RECEIVE_UUID);
+        if (receiveBGC == null) {
             MyToast.show("无法识别当前Characteristic");
             return;
         }
-        clearData();
-        if ((currentCharacteristic.getProperties() & BluetoothGattCharacteristic.PROPERTY_NOTIFY) == 0) {
+        if ((receiveBGC.getProperties() & BluetoothGattCharacteristic.PROPERTY_NOTIFY) == 0) {
 
         } else {
             try {
-                boolean notifyState = WCHBluetoothManager.getInstance().getNotifyState(currentCharacteristic);
+                boolean notifyState = WCHBluetoothManager.getInstance().getNotifyState(receiveBGC);
                 LogUtil.d("当前通知： " + notifyState);
                 if (notifyState) {
-                    WCHBluetoothManager.getInstance().openNotify(currentCharacteristic, notifyDataCallback);
+                    WCHBluetoothManager.getInstance().openNotify(receiveBGC, notifyDataCallback);
                 }
                 /*sbNotify.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
                     @Override
@@ -514,11 +518,16 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
 
                     }
                 });*/
-                enableNotify(currentCharacteristic, true);//TODO enable
+                enableNotify(receiveBGC, true);
             } catch (BLELibException e) {
                 e.printStackTrace();
             }
         }
+
+    }
+
+    protected void enableNotify() {
+        enableNotify(receiveBGC, true);
     }
 
     private void enableNotify(BluetoothGattCharacteristic characteristic, boolean enable) {
@@ -584,13 +593,16 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
         }
     };
 
-    private void updateValueTextView(final byte[] data) {
+    private void updateValueTextView(byte[] data) {
         if (data == null || data.length == 0) {
             return;
         }
         count_R += data.length;
         LogUtil.d("共接收到：" + count_R);
+        updateReadValue(data);
     }
+
+    protected abstract void updateReadValue(byte[] data);
 
     void clearData() {
         count_R = 0;
@@ -609,26 +621,29 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
         return null;
     }
 
-    protected void writeData(BluetoothGattCharacteristic characteristic, byte[] bytes) {
-        try {
-            /*byte[] bytes=null;
-            if (sbSendHex.isChecked()) {
-                String s=etSend.getText().toString();
-                if(!s.matches("([0-9|a-f|A-F]{2})*")){
-                    showToast("发送内容不符合HEX规范");
-                    return;
-                }
-                bytes = FormatUtil.hexStringToBytes(etSend.getText().toString());
-            } else {
-                bytes = etSend.getText().toString().getBytes("utf-8");
-            }*/
-            write(characteristic, bytes);
-        } catch (Exception e) {
-            LogUtil.d(e.getMessage());
+    protected void write(byte[] data) {
+        BluetoothGattCharacteristic sendBGC = getCurrentCharacteristic(SERVER_UUID, SEND_UUID);
+        if (sendBGC == null) {
+            MyToast.show("无法识别当前Characteristic");
+            return;
         }
+        clearData();
+        if ((sendBGC.getProperties() & BluetoothGattCharacteristic.PROPERTY_WRITE) == 0
+                || (sendBGC.getProperties() & BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE) == 0) {
+        } else {
+            //写方式
+            if ((sendBGC.getProperties() & BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE) == 0) {
+                sendBGC.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE);
+            }
+            if ((sendBGC.getProperties() & BluetoothGattCharacteristic.PROPERTY_WRITE) == 0) {
+                sendBGC.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
+            }
+        }
+        write(sendBGC, data);
     }
 
     private void write(BluetoothGattCharacteristic characteristic, byte[] data) {
+        System.out.println("### write");
         Observable.create((ObservableOnSubscribe<String>) emitter -> {
             try {
                 int write = WCHBluetoothManager.getInstance().write(characteristic, data, data.length);
@@ -641,7 +656,7 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
                     count_W += write;
                     emitter.onComplete();
                 }
-
+                System.out.println("### 发送成功");
             } catch (BLELibException e) {
                 emitter.onError(new Throwable(e.getMessage()));
             }
@@ -677,7 +692,12 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
                 });
     }
 
+    protected void read() {
+        read(receiveBGC);
+    }
+
     protected void read(BluetoothGattCharacteristic characteristic) {
+        System.out.println("### read");
         Observable.create((ObservableOnSubscribe<String>) emitter -> {
             try {
                 byte[] read = WCHBluetoothManager.getInstance().read(characteristic, true);
