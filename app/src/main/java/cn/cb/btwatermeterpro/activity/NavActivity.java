@@ -48,6 +48,12 @@ public class NavActivity extends BleConnectBaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        initBle();
+    }
+
+    @Override
     protected void allReady() {
 
     }

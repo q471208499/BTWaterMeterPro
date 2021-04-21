@@ -14,7 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import cn.cb.btwatermeterpro.R;
+import cn.cb.btwatermeterpro.activity.MainActivity;
 import cn.cb.btwatermeterpro.bean.CommonBean;
+import cn.wch.blelib.WCHBluetoothManager;
+import cn.wch.blelib.exception.BLELibException;
 import es.dmoral.toasty.MyToast;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder> {
@@ -49,6 +52,13 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
             if (commonBean.getCls() == null) {
                 MyToast.show("功能开发中。。。");
             } else {
+                if (commonBean.getCls() == MainActivity.class) {
+                    try {
+                        WCHBluetoothManager.getInstance().disconnect(false);
+                    } catch (BLELibException e) {
+                        e.printStackTrace();
+                    }
+                }
                 Intent intent = new Intent(mContext, commonBean.getCls());
                 intent.putExtra(Intent.EXTRA_TITLE, commonBean.getTitle());
                 mContext.startActivity(intent);

@@ -146,7 +146,7 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
     }
 
 
-    private void initBle() {
+    protected void initBle() {
         if (!isSupportBle(this)) {
             MyToast.show("本设备不支持BLE");
             //System.exit(0);
@@ -467,6 +467,13 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
         @Override
         public void OnScanDevice(BluetoothDevice device, int rssi, byte[] broadcastRecord) {
             String mac = device.getAddress();
+            String name = device.getName();
+            if (name == null || name.isEmpty()) {//异常名字不显示
+                return;
+            }
+            if (!name.startsWith("SY-BLE")) {//仅展示SY-BLE开头数据
+                return;
+            }
             //update device list
             if (deviceListDialog != null && deviceListDialog.isVisible()) {
                 deviceListDialog.update(device, rssi);

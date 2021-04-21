@@ -17,7 +17,7 @@ import es.dmoral.toasty.MyToast;
 
 public class SettingActivity extends BleConnectBaseActivity {
 
-    private EditText meterAddressSrc, meterAddressTarget, initNumber, send, time, indexCode, version;
+    private EditText meterAddressSrc, meterAddressTarget, initNumber, send, time, indexCode, softwareDate, hardwareDate;
     private TextView log;
 
     @Override
@@ -49,7 +49,8 @@ public class SettingActivity extends BleConnectBaseActivity {
         send.setText("");
         time.setText("");
         indexCode.setText("");
-        version.setText("");
+        softwareDate.setText("");
+        hardwareDate.setText("");
     }
 
     private void bindView() {
@@ -60,7 +61,8 @@ public class SettingActivity extends BleConnectBaseActivity {
         send = findViewById(R.id.setting_send_value);
         time = findViewById(R.id.setting_time_value);
         indexCode = findViewById(R.id.setting_index_code_value);
-        version = findViewById(R.id.setting_software_value);
+        softwareDate = findViewById(R.id.setting_software_value);
+        hardwareDate = findViewById(R.id.setting_hardware_value);
 
         findViewById(R.id.setting_btn_read).setOnClickListener(clickListener);
         findViewById(R.id.setting_btn_set).setOnClickListener(clickListener);
@@ -155,7 +157,7 @@ public class SettingActivity extends BleConnectBaseActivity {
             String deviceId = receive.getDeviceId();
             String softwareDate = receive.getSoftwareDate();
             indexCode.setText(deviceId);
-            version.setText(softwareDate);
+            this.softwareDate.setText(softwareDate);
         }
     }
 

@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cn.cb.btwatermeterpro">
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -19,28 +19,36 @@
         android:theme="@style/Theme.BTWaterMeterPro">
         <activity
             android:name=".activity.SettingActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeBase.NoActionBar" />
         <activity
             android:name=".activity.PatchActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeBase.NoActionBar" />
         <activity
             android:name=".activity.HistoryActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeBase.NoActionBar" />
         <activity
             android:name=".activity.DownloadActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeBase.NoActionBar" />
         <activity
             android:name=".activity.AboutActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeBase.NoActionBar" />
         <activity
             android:name=".activity.NavActivity"
-            android:label="@string/title_activity_nav" />
+            android:label="@string/title_activity_nav"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.MainActivity"
             android:label="蓝牙智能表"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeBase.NoActionBar" />
         <activity
             android:name=".activity.LoginActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeBase.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
