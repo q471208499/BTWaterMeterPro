@@ -10,7 +10,6 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import cn.cb.baselibrary.activity.BaseActivity;
 import cn.cb.baselibrary.utils.ABTimeUtils;
 import cn.cb.baselibrary.utils.AppUpdateHelper;
 import cn.cb.btwatermeterpro.BTApplication;
@@ -45,12 +44,6 @@ public class NavActivity extends BleConnectBaseActivity {
     @Override
     protected void startTask() {
         startScan();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        initBle();
     }
 
     @Override

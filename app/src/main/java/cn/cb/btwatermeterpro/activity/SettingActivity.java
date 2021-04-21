@@ -154,10 +154,12 @@ public class SettingActivity extends BleConnectBaseActivity {
         setLog("收：", data);
         BleProDevice.Receive receive = new BleProDevice.Receive(HexUtil.formatHexString(data));
         if (receive.isValidForCommon()) {
-            String deviceId = receive.getDeviceId();
-            String softwareDate = receive.getSoftwareDate();
-            indexCode.setText(deviceId);
-            this.softwareDate.setText(softwareDate);
+            indexCode.setText(receive.getDeviceId());
+            softwareDate.setText(receive.getSoftwareDate());
+            hardwareDate.setText(receive.getHardwareDate());
+            initNumber.setText(String.valueOf(receive.getMeterNumber()));
+            time.setText(String.valueOf(receive.getTime()));
+            send.setText(String.valueOf(receive.getSignaling()));
         }
     }
 
