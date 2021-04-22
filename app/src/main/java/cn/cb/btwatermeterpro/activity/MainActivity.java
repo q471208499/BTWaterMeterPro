@@ -224,8 +224,13 @@ public class MainActivity extends BleBaseActivity {
 
     @Override
     protected void onDestroy() {
-        BleManager.getInstance().cancelScan();
-        leScanner.stopScan(callback);
+        try {
+            BleManager.getInstance().cancelScan();
+            if (leScanner != null)
+                leScanner.stopScan(callback);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         super.onDestroy();
     }
 }

@@ -252,6 +252,7 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
             cancelSpeedMonitor();
             MyToast.show("蓝牙断开连接");
             onDisconnect();
+            BTApplication.setConnectAddress(null);
         }
     };
 
@@ -519,7 +520,7 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
                     }
                 });*/
                 //enableNotify(receiveBGC, true);
-                enableNotify();
+                runOnUiThread(() -> enableNotify());
             } catch (BLELibException e) {
                 e.printStackTrace();
             }
@@ -541,7 +542,7 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
                         emitter.onError(new Throwable("打开通知失败"));
                         return;
                     } else {
-                        setMtu(100);
+                        runOnUiThread(() -> setMtu(100));
                     }
                 } else {
                     boolean b = WCHBluetoothManager.getInstance().closeNotify(characteristic);
@@ -562,7 +563,9 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
                 .subscribe(new Observer<String>() {
                     @Override
                     public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
-                        DialogUtil.getInstance().showLoadingDialog(BleConnectBaseActivity.this, "正在改变通知");
+                        runOnUiThread(() -> {
+                            DialogUtil.getInstance().showLoadingDialog(BleConnectBaseActivity.this, "正在改变通知");
+                        });
                     }
 
                     @Override
@@ -572,13 +575,13 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
 
                     @Override
                     public void onError(@io.reactivex.annotations.NonNull Throwable e) {
-                        DialogUtil.getInstance().hideLoadingDialog();
+                        runOnUiThread(() -> DialogUtil.getInstance().hideLoadingDialog());
                         MyToast.show(e.getMessage());
                     }
 
                     @Override
                     public void onComplete() {
-                        DialogUtil.getInstance().hideLoadingDialog();
+                        runOnUiThread(() -> DialogUtil.getInstance().hideLoadingDialog());
                     }
                 });
     }
@@ -715,7 +718,9 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
                     @Override
                     public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
                         //btnRead.setEnabled(false);
-                        DialogUtil.getInstance().showLoadingDialog(BleConnectBaseActivity.this, "正在读取");
+                        runOnUiThread(() -> {
+                            DialogUtil.getInstance().showLoadingDialog(BleConnectBaseActivity.this, "正在读取");
+                        });
                     }
 
                     @Override
@@ -726,13 +731,13 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
                     @Override
                     public void onError(@io.reactivex.annotations.NonNull Throwable e) {
                         //btnRead.setEnabled(true);
-                        DialogUtil.getInstance().hideLoadingDialog();
+                        runOnUiThread(() -> DialogUtil.getInstance().hideLoadingDialog());
                     }
 
                     @Override
                     public void onComplete() {
                         //btnRead.setEnabled(true);
-                        DialogUtil.getInstance().hideLoadingDialog();
+                        runOnUiThread(() -> DialogUtil.getInstance().hideLoadingDialog());
                     }
                 });
     }

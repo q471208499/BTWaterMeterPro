@@ -49,9 +49,17 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HisViewH
         int[] increment = (int[]) dataMap.get("increment");
         int[] readNumber = (int[]) dataMap.get("readNumber");
 
+        JSONObject o = new JSONObject();
+        o.put("time", "00:00");
+        o.put("readNumber", String.valueOf((int) dataMap.get("start")));
+        o.put("flow", "0");
+        mArray.add(o);
+        notifyItemInserted(mArray.size());
+
         for (int i = 0; i < increment.length; i++) {
             JSONObject object = new JSONObject();
-            object.put("time", (i + 1) + ":00");
+            //object.put("time", (i + 1) + ":00");
+            object.put("time", String.format("%02d:00", i + 1));
             object.put("readNumber", String.valueOf(readNumber[i]));
             object.put("flow", String.valueOf(increment[i]));
             mArray.add(object);

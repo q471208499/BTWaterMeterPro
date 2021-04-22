@@ -9,6 +9,8 @@ import com.clj.fastble.project.blepro.BleProDevice;
 import com.clj.fastble.project.blepro.BleProSend;
 import com.clj.fastble.utils.HexUtil;
 
+import java.text.DecimalFormat;
+
 import cn.cb.baselibrary.utils.ABTextUtils;
 import cn.cb.btwatermeterpro.BTApplication;
 import cn.cb.btwatermeterpro.R;
@@ -19,6 +21,7 @@ public class SettingActivity extends BleConnectBaseActivity {
 
     private EditText meterAddressSrc, meterAddressTarget, initNumber, send, time, indexCode, softwareDate, hardwareDate;
     private TextView log;
+    private StringBuilder logStrBuilder = new StringBuilder();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +39,11 @@ public class SettingActivity extends BleConnectBaseActivity {
 
     @Override
     protected void allReady() {
-        byte[] b = BleProDevice.getInfoData();
-        write(b);
-        setLog("发：", b);
-        showLoading();
+        runOnUiThread(() -> {
+            byte[] b = BleProDevice.getInfoData();
+            write(b);
+            setLog("发：", b);
+        });
     }
 
     private void initEdit() {
@@ -85,18 +89,17 @@ public class SettingActivity extends BleConnectBaseActivity {
                 startScan();
             }
         } else if (v.getId() == R.id.setting_btn_set) {
-            if (ABTextUtils.isEmpty(initNumber, send, time)) {
+            if (ABTextUtils.isEmpty(meterAddressTarget, initNumber, send, time)) {
                 MyToast.show(R.string.toast_complete);
                 return;
             }
             String target = meterAddressTarget.getText().toString();
-            int initNum = Integer.parseInt(initNumber.getText().toString());
+            int initNum = getInitNumber();
             int sendInt = Integer.parseInt(send.getText().toString());
             int timeInt = Integer.parseInt(time.getText().toString());
             byte[] bytes = BleProSend.getSettingData(target, initNum, sendInt, timeInt);
             write(bytes);
             setLog("发：", bytes);
-            showLoading();
         }
         //===============================debug step log【Start】====================================
         else if (v.getId() == R.id.setting_btn_connect) {
@@ -112,12 +115,12 @@ public class SettingActivity extends BleConnectBaseActivity {
             write(b);
             setLog("发：", b);
         } else if (v.getId() == R.id.setting_btn_set_test) {
-            if (ABTextUtils.isEmpty(initNumber, send, time)) {
+            if (ABTextUtils.isEmpty(meterAddressTarget, initNumber, send, time)) {
                 MyToast.show(R.string.toast_complete);
                 return;
             }
             String target = meterAddressTarget.getText().toString();
-            int initNum = Integer.parseInt(initNumber.getText().toString());
+            int initNum = getInitNumber();
             int sendInt = Integer.parseInt(send.getText().toString());
             int timeInt = Integer.parseInt(time.getText().toString());
             byte[] bytes = BleProSend.getSettingData(target, initNum, sendInt, timeInt);
@@ -127,52 +130,55 @@ public class SettingActivity extends BleConnectBaseActivity {
         //===============================debug step log【End】====================================
     };
 
+    private int getInitNumber() {
+        String initStr = initNumber.getText().toString();
+        double d = Double.parseDouble(initStr);
+        DecimalFormat df = new DecimalFormat("#.000");
+        double dd = Double.parseDouble(df.format(d));
+        return (int) (dd * 1000);
+    }
+
     @Override
     protected void onDiscoverService() {
         /*setMtu(100);
         getDeviceInfo();*/
     }
 
-    private void getDeviceInfo() {
-        read();
-        byte[] b = BleProDevice.getInfoData();
-        System.out.println("### write: " + HexUtil.formatHexString(b, true));
-        write(b);
-        setLog("发：", b);
-    }
-
     @Override
     protected void onConnectSuccess() {
         meterAddressSrc.setText(address.replace(":", ""));
         //连接成功，随后进行枚举服务
-        startTest();
+        MyToast.showL("连接成功，请再次获取参数！");
     }
 
     @Override
     protected void updateReadValue(byte[] data) {
-        dismissLoading();
         setLog("收：", data);
-        BleProDevice.Receive receive = new BleProDevice.Receive(HexUtil.formatHexString(data));
-        if (receive.isValidForCommon()) {
-            indexCode.setText(receive.getDeviceId());
-            softwareDate.setText(receive.getSoftwareDate());
-            hardwareDate.setText(receive.getHardwareDate());
-            initNumber.setText(String.valueOf(receive.getMeterNumber()));
-            time.setText(String.valueOf(receive.getTime()));
-            send.setText(String.valueOf(receive.getSignaling()));
-        }
+        runOnUiThread(() -> {
+            BleProDevice.Receive receive = new BleProDevice.Receive(HexUtil.formatHexString(data));
+            if (receive.isValidForCommon()) {
+                indexCode.setText(receive.getDeviceId());
+                initNumber.setText(String.valueOf(receive.getMeterNumber()));
+                time.setText(String.valueOf(receive.getTime()));
+                send.setText(String.valueOf(receive.getSignaling()));
+                String softwareStr = String.format("20%2s.%2s",
+                        receive.getSoftwareDate().substring(2),
+                        receive.getSoftwareDate().substring(2, 4));
+                String hardwareStr = String.format("20%2s.%2s",
+                        receive.getHardwareDate().substring(2),
+                        receive.getHardwareDate().substring(2, 4));
+                softwareDate.setText(softwareStr);
+                hardwareDate.setText(hardwareStr);
+            }
+        });
     }
 
     private void setLog(String flag, byte[] data) {
         String logStr = HexUtil.formatHexString(data, true);
-        String textStr = log.getText().toString();
-        if (logStr == null)
-            logStr = "";
-        StringBuilder sb = new StringBuilder();
-        sb.append(textStr).append(flag + logStr).append("\n");
-        System.out.println("### updateReadValue: " + sb.toString());
+        logStrBuilder.append(flag + logStr).append("\n");
+        System.out.println("### updateReadValue: " + logStr);
         runOnUiThread(() -> {
-            log.setText(sb.toString());
+            log.setText(logStrBuilder.toString());
         });
     }
 }

@@ -77,7 +77,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginRight="22dp"
         android:background="@drawable/input_editable"
-        android:inputType="number"
+        android:inputType="numberDecimal"
         android:minLines="1"
         android:paddingStart="8dp"
         android:paddingEnd="30dp"
