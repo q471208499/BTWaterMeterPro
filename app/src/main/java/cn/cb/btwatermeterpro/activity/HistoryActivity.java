@@ -236,7 +236,7 @@ public class HistoryActivity extends BleConnectBaseActivity {
         DatePickerDialog dialog = new DatePickerDialog(this);
         dialog.setOnDateSetListener((view, year, month, dayOfMonth) -> {
             TextView textView = (TextView) v;
-            String dateStr = String.format("%04d-%02d-%02d", year, month, dayOfMonth);
+            String dateStr = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth);
             textView.setText(dateStr);
             if (v.getId() == R.id.his_date_picker_1) {
                 startCld = Calendar.getInstance();

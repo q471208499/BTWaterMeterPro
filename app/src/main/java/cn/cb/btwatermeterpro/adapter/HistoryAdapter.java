@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import java.text.NumberFormat;
 import java.util.Map;
+import java.util.Objects;
 
 import cn.cb.btwatermeterpro.R;
 
@@ -49,19 +51,16 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HisViewH
         int[] increment = (int[]) dataMap.get("increment");
         int[] readNumber = (int[]) dataMap.get("readNumber");
 
-        JSONObject o = new JSONObject();
-        o.put("time", "00:00");
-        o.put("readNumber", String.valueOf((int) dataMap.get("start")));
-        o.put("flow", "0");
-        mArray.add(o);
-        notifyItemInserted(mArray.size());
-
-        for (int i = 0; i < increment.length; i++) {
+        for (int i = 0; i < Objects.requireNonNull(increment).length; i++) {
+            NumberFormat nf = NumberFormat.getInstance();
+            nf.setMinimumFractionDigits(3);
             JSONObject object = new JSONObject();
-            //object.put("time", (i + 1) + ":00");
-            object.put("time", String.format("%02d:00", i + 1));
-            object.put("readNumber", String.valueOf(readNumber[i]));
-            object.put("flow", String.valueOf(increment[i]));
+            assert readNumber != null;
+            String nStr = nf.format(readNumber[i] / 1000F).replaceAll(",", "");
+            String fStr = nf.format(increment[i] / 1000F).replaceAll(",", "");
+            object.put("time", String.format("%02d:00", i));
+            object.put("readNumber", nStr);
+            object.put("flow", fStr);
             mArray.add(object);
             notifyItemInserted(mArray.size());
         }
