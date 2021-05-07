@@ -7,22 +7,26 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.cb.baselibrary.fragment.BaseFragment;
 import cn.cb.baselibrary.widget.MyDividerItemDecoration;
+import cn.cb.btwatermeterpro.BTApplication;
 import cn.cb.btwatermeterpro.R;
 import cn.cb.btwatermeterpro.activity.DownloadActivity;
 import cn.cb.btwatermeterpro.activity.HistoryActivity;
 import cn.cb.btwatermeterpro.activity.MainActivity;
+import cn.cb.btwatermeterpro.activity.NavActivity;
 import cn.cb.btwatermeterpro.activity.PatchActivity;
 import cn.cb.btwatermeterpro.activity.SettingActivity;
 import cn.cb.btwatermeterpro.adapter.HomeAdapter;
 import cn.cb.btwatermeterpro.bean.CommonBean;
 
 public class HomeFragment extends BaseFragment {
+    private SwipeRefreshLayout refreshLayout;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -38,7 +42,17 @@ public class HomeFragment extends BaseFragment {
         recyclerView.addItemDecoration(new MyDividerItemDecoration());
         recyclerView.suppressLayout(true);
         setOutline(recyclerView);
+
+        refreshLayout = root.findViewById(R.id.home_refresh);
+        refreshLayout.setOnRefreshListener(refreshListener);
     }
+
+    private SwipeRefreshLayout.OnRefreshListener refreshListener = () -> {
+        if (getActivity() == null) return;
+        NavActivity navActivity = (NavActivity) getActivity();
+        if (!navActivity.checkConnected(BTApplication.getConnectAddress())) navActivity.startScan();
+        refreshLayout.setRefreshing(false);
+    };
 
     private List<CommonBean> getList() {
         List<CommonBean> list = new ArrayList<>();

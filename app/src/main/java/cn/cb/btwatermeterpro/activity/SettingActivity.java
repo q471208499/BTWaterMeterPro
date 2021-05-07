@@ -15,13 +15,14 @@ import cn.cb.baselibrary.utils.ABTextUtils;
 import cn.cb.btwatermeterpro.BTApplication;
 import cn.cb.btwatermeterpro.R;
 import cn.cb.btwatermeterpro.activity.base.BleConnectBaseActivity;
+import cn.cb.btwatermeterpro.provider.BTConstant;
 import es.dmoral.toasty.MyToast;
 
 public class SettingActivity extends BleConnectBaseActivity {
 
     private EditText meterAddressSrc, meterAddressTarget, initNumber, send, time, indexCode, softwareDate, hardwareDate;
     private TextView log;
-    private StringBuilder logStrBuilder = new StringBuilder();
+    private final StringBuilder logStrBuilder = new StringBuilder();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +60,6 @@ public class SettingActivity extends BleConnectBaseActivity {
 
     private void bindView() {
         meterAddressSrc = findViewById(R.id.setting_meter_address_src_value);
-        log = findViewById(R.id.setting_log);
         meterAddressTarget = findViewById(R.id.setting_meter_address_target_value);
         initNumber = findViewById(R.id.setting_init_number_value);
         send = findViewById(R.id.setting_send_value);
@@ -72,16 +72,25 @@ public class SettingActivity extends BleConnectBaseActivity {
         findViewById(R.id.setting_btn_set).setOnClickListener(clickListener);
 
         //===============================debug step log【Start】====================================
+        log = findViewById(R.id.setting_log);
         findViewById(R.id.setting_btn_connect).setOnClickListener(clickListener);
         findViewById(R.id.setting_btn_mut).setOnClickListener(clickListener);
         findViewById(R.id.setting_btn_service).setOnClickListener(clickListener);
         findViewById(R.id.setting_btn_notify).setOnClickListener(clickListener);
         findViewById(R.id.setting_btn_write).setOnClickListener(clickListener);
         findViewById(R.id.setting_btn_set_test).setOnClickListener(clickListener);
+        int visible = BTConstant.DEVICE_LOG ? View.VISIBLE : View.GONE;
+        findViewById(R.id.setting_log).setVisibility(visible);
+        findViewById(R.id.setting_btn_connect).setVisibility(visible);
+        findViewById(R.id.setting_btn_mut).setVisibility(visible);
+        findViewById(R.id.setting_btn_service).setVisibility(visible);
+        findViewById(R.id.setting_btn_notify).setVisibility(visible);
+        findViewById(R.id.setting_btn_write).setVisibility(visible);
+        findViewById(R.id.setting_btn_set_test).setVisibility(visible);
         //===============================debug step log【End】====================================
     }
 
-    private View.OnClickListener clickListener = v -> {
+    private final View.OnClickListener clickListener = v -> {
         if (v.getId() == R.id.setting_btn_read) {
             if (checkConnected(BTApplication.getConnectAddress())) {
                 startTest();
@@ -175,10 +184,8 @@ public class SettingActivity extends BleConnectBaseActivity {
 
     private void setLog(String flag, byte[] data) {
         String logStr = HexUtil.formatHexString(data, true);
-        logStrBuilder.append(flag + logStr).append("\n");
+        logStrBuilder.append(flag).append(logStr).append("\n");
         System.out.println("### updateReadValue: " + logStr);
-        runOnUiThread(() -> {
-            log.setText(logStrBuilder.toString());
-        });
+        runOnUiThread(() -> log.setText(logStrBuilder.toString()));
     }
 }

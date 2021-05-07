@@ -16,4 +16,6 @@ public class BTConstant {
     public static final int APP_TYPE_ALL = 3;
     public static final int APP_TYPE_REL = 2;
     public static final int APP_TYPE_DEV = 1;
+
+    public static boolean DEVICE_LOG = false;
 }

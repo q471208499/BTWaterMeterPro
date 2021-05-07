@@ -11,6 +11,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
@@ -103,7 +106,7 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
     }
 
 
-    protected boolean checkConnected(String address) {
+    public boolean checkConnected(String address) {
         if (address == null || address.isEmpty()) return false;
         return WCHBluetoothManager.getInstance().isConnected(address);
     }
@@ -394,7 +397,7 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
         sendBGC = null;*/
     }
 
-    protected void startScan() {
+    public void startScan() {
         //init transitionRunnable
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -594,7 +597,21 @@ public abstract class BleConnectBaseActivity extends BaseActivity {
 
         @Override
         public void OnData(String mac, byte[] data) {
-            updateValueTextView(data);
+            //updateValueTextView(data);
+            Message message = handler.obtainMessage(1);
+            message.obj = data;
+            handler.sendMessage(message);
+        }
+    };
+
+    private Handler handler = new Handler(Looper.getMainLooper()){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            //super.handleMessage(msg);
+            if (msg.what == 1) {
+                byte[] data = (byte[]) msg.obj;
+                updateValueTextView(data);
+            }
         }
     };
 

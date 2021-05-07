@@ -4,7 +4,7 @@
     android:id="@+id/tip_bar"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:background="@color/colorBlack2">
+    android:background="@color/white_2">
 
     <ImageView
         android:id="@+id/view_img"

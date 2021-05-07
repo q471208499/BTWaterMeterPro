@@ -13,6 +13,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -22,6 +23,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HisViewH
 
     private Context mContext;
     private JSONArray mArray = new JSONArray();
+    private int index = 0;
 
     public HistoryAdapter(Context context) {
         mContext = context;
@@ -47,7 +49,14 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HisViewH
         return mArray == null ? 0 : mArray.size();
     }
 
-    public void addDataMap(Map<String, Object> dataMap) {
+    public int getIndex() {
+        return index;
+    }
+
+    public void setDataMap(List<Map<String, Object>> mapList, int index) {
+        Map<String, Object> dataMap = mapList.get(index);
+        this.index = index;
+        mArray.clear();
         int[] increment = (int[]) dataMap.get("increment");
         int[] readNumber = (int[]) dataMap.get("readNumber");
 
@@ -62,14 +71,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HisViewH
             object.put("readNumber", nStr);
             object.put("flow", fStr);
             mArray.add(object);
-            notifyItemInserted(mArray.size());
+            notifyDataSetChanged();
         }
-    }
-
-    public boolean cleanDataMapList() {
-        mArray.clear();
-        notifyDataSetChanged();
-        return true;
     }
 
     class HisViewHolder extends RecyclerView.ViewHolder {

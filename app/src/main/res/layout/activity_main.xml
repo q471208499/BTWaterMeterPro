@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorWhite3"
+    android:background="@android:color/white"
     tools:context=".activity.MainActivity">
 
     <include layout="@layout/tool_bar" />
@@ -38,9 +38,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
-        android:backgroundTint="@color/colorWhite2"
+        android:backgroundTint="@color/white"
         android:src="@mipmap/ic_start"
-        app:backgroundTint="@color/colorWhite5"
+        app:backgroundTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/main_stop_btn" />
@@ -50,9 +50,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
-        android:backgroundTint="@color/colorWhite2"
+        android:backgroundTint="@color/white"
         android:src="@mipmap/ic_stop"
-        app:backgroundTint="@color/colorWhite5"
+        app:backgroundTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/main_start_pause_btn"
         app:layout_constraintRight_toRightOf="parent" />

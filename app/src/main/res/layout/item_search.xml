@@ -218,7 +218,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="15 次"
-            android:textColor="@color/colorGreen"
+            android:textColor="@color/green_1"
             android:textStyle="bold"
             app:layout_constraintBaseline_toBaselineOf="@id/item_receive_time2_key"
             app:layout_constraintRight_toRightOf="parent" />

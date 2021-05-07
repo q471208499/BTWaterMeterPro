@@ -12,11 +12,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import cn.cb.baselibrary.utils.ABTimeUtils;
 import cn.cb.baselibrary.utils.AppUpdateHelper;
-import cn.cb.btwatermeterpro.BTApplication;
 import cn.cb.btwatermeterpro.BuildConfig;
 import cn.cb.btwatermeterpro.R;
 import cn.cb.btwatermeterpro.activity.base.BleConnectBaseActivity;
-import cn.cb.btwatermeterpro.db.DbManager;
 import cn.wch.blelib.WCHBluetoothManager;
 import cn.wch.blelib.exception.BLELibException;
 
@@ -38,7 +36,7 @@ public class NavActivity extends BleConnectBaseActivity {
         setStatusBarColor(android.R.color.white);
         getSupportActionBar().hide();
         new AppUpdateHelper(BuildConfig.UPDATE_URL + "?" + ABTimeUtils.getCurrentTimeInString()).getUpdateInfo();
-        if (BTApplication.FIRST) DbManager.getInstance().getSqlServer().testData();
+        //if (BTApplication.FIRST) DbManager.getInstance().getSqlServer().testData();
     }
 
     @Override
