@@ -1,10 +1,10 @@
 package cn.cb.btwatermeterpro.ui;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 
 public class DialogUtil {
@@ -22,7 +22,7 @@ public class DialogUtil {
 
 
 
-    public void showDisconnectDialog(@NonNull Activity activity, final IDisconnectResult result){
+    public void showDisconnectDialog(@NonNull AppCompatActivity activity, final IDisconnectResult result){
         AlertDialog.Builder builder=new AlertDialog.Builder(activity);
 
         builder .setMessage("蓝牙已连接，确定断开？")
@@ -62,7 +62,7 @@ public class DialogUtil {
         void onCancel();
     }
 
-    public void showLoadingDialog(@NonNull Activity activity, @NonNull String info){
+    public void showLoadingDialog(@NonNull AppCompatActivity activity, @NonNull String info){
         if(loadingDialog==null){
             loadingDialog=new LoadingDialog(activity,info);
             loadingDialog.show();
@@ -79,7 +79,7 @@ public class DialogUtil {
         }
     }
 
-    public void showSimpleDialog(@NonNull Activity activity, String message, final IResult result){
+    public void showSimpleDialog(@NonNull AppCompatActivity activity, String message, final IResult result){
         AlertDialog.Builder builder=new AlertDialog.Builder(activity);
 
         builder .setMessage(message)
@@ -109,7 +109,7 @@ public class DialogUtil {
         });
     }
 
-    public void showSimpleDialog(@NonNull Activity activity, String message, @NonNull String PositiveButtonText, @NonNull String NeutralButtonText, final IResult result){
+    public void showSimpleDialog(@NonNull AppCompatActivity activity, String message, @NonNull String PositiveButtonText, @NonNull String NeutralButtonText, final IResult result){
         AlertDialog.Builder builder=new AlertDialog.Builder(activity);
 
         builder .setMessage(message)
@@ -139,7 +139,7 @@ public class DialogUtil {
         });
     }
 
-    public void showSimpleDialog(@NonNull Activity activity, String message, @NonNull String PositiveButtonText, final IResult result){
+    public void showSimpleDialog(@NonNull AppCompatActivity activity, String message, @NonNull String PositiveButtonText, final IResult result){
         AlertDialog.Builder builder=new AlertDialog.Builder(activity);
 
         builder .setMessage(message)
