@@ -140,7 +140,8 @@ public class HistoryActivity extends BleConnectBaseActivity {
 
         pickerStart.setText(ABDateUtils.getCurDateStr(ABDateUtils.FORMAT_YMD));
         pickerEnd.setText(ABDateUtils.getCurDateStr(ABDateUtils.FORMAT_YMD));
-        dateCur.setText("####-##-##");
+        //dateCur.setText("####-##-##");
+        dateCur.setText("");
         startCld = Calendar.getInstance();
         endCld = Calendar.getInstance();
         endCld.add(Calendar.DAY_OF_MONTH, 1);

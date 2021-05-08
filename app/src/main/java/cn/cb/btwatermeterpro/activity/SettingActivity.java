@@ -103,7 +103,7 @@ public class SettingActivity extends BleConnectBaseActivity {
                 return;
             }
             String target = meterAddressTarget.getText().toString();
-            int initNum = getInitNumber();
+            long initNum = getInitNumber();
             int sendInt = Integer.parseInt(send.getText().toString());
             int timeInt = Integer.parseInt(time.getText().toString());
             byte[] bytes = BleProSend.getSettingData(target, initNum, sendInt, timeInt);
@@ -129,7 +129,7 @@ public class SettingActivity extends BleConnectBaseActivity {
                 return;
             }
             String target = meterAddressTarget.getText().toString();
-            int initNum = getInitNumber();
+            long initNum = getInitNumber();
             int sendInt = Integer.parseInt(send.getText().toString());
             int timeInt = Integer.parseInt(time.getText().toString());
             byte[] bytes = BleProSend.getSettingData(target, initNum, sendInt, timeInt);
@@ -139,12 +139,11 @@ public class SettingActivity extends BleConnectBaseActivity {
         //===============================debug step log【End】====================================
     };
 
-    private int getInitNumber() {
+    private long getInitNumber() {
         String initStr = initNumber.getText().toString();
         double d = Double.parseDouble(initStr);
         DecimalFormat df = new DecimalFormat("#.000");
-        double dd = Double.parseDouble(df.format(d));
-        return (int) (dd * 1000);
+        return Long.parseLong(df.format(d).replace(".", ""));
     }
 
     @Override
@@ -171,11 +170,11 @@ public class SettingActivity extends BleConnectBaseActivity {
                 time.setText(String.valueOf(receive.getTime()));
                 send.setText(String.valueOf(receive.getSignaling()));
                 String softwareStr = String.format("20%2s.%2s",
-                        receive.getSoftwareDate().substring(2),
-                        receive.getSoftwareDate().substring(2, 4));
+                        receive.getSoftwareDate().substring(2, 4),
+                        receive.getSoftwareDate().substring(0, 2));
                 String hardwareStr = String.format("20%2s.%2s",
-                        receive.getHardwareDate().substring(2),
-                        receive.getHardwareDate().substring(2, 4));
+                        receive.getHardwareDate().substring(2, 4),
+                        receive.getHardwareDate().substring(0, 2));
                 softwareDate.setText(softwareStr);
                 hardwareDate.setText(hardwareStr);
             }
