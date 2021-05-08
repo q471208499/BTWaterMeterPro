@@ -1,7 +1,6 @@
 package cn.cb.btwatermeterpro.activity.base;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,6 +13,7 @@ import android.provider.Settings;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 

@@ -19,6 +19,7 @@ import android.widget.Chronometer;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.clj.fastble.BleManager;
@@ -76,7 +77,7 @@ public class MainActivity extends BleBaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuItem menuItem = menu.add(Menu.NONE, Menu.NONE, Menu.FIRST, "详情");
-        menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        MenuItemCompat.setShowAsAction(menuItem, MenuItem.SHOW_AS_ACTION_ALWAYS);
         return super.onCreateOptionsMenu(menu);
     }
 
