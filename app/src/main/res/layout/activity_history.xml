@@ -56,7 +56,6 @@
         android:padding="8dp"
         android:text="2021-3-25"
         android:textColor="@color/black"
-        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toRightOf="@id/his_date_start_key"
         app:layout_constraintTop_toBottomOf="@id/his_meter_address" />
@@ -80,7 +79,6 @@
         android:padding="8dp"
         android:text="2021-3-31"
         android:textColor="@color/black"
-        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBaseline_toBaselineOf="@id/his_date_picker_start"
         app:layout_constraintRight_toRightOf="parent" />
@@ -102,7 +100,6 @@
         android:layout_marginTop="5dp"
         android:padding="8dp"
         android:text="2021-3-25"
-        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBaseline_toBaselineOf="@id/his_btn_next"
         app:layout_constraintLeft_toLeftOf="@id/his_date_picker_start"
@@ -135,6 +132,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="1. 连接"
+        android:visibility="gone"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/his_btn_service"
         app:layout_constraintTop_toBottomOf="@id/his_btn_last" />
@@ -144,6 +142,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="2. 获取服务"
+        android:visibility="gone"
         app:layout_constraintLeft_toRightOf="@id/his_btn_connect"
         app:layout_constraintRight_toLeftOf="@id/his_btn_notify"
         app:layout_constraintTop_toTopOf="@id/his_btn_connect" />
@@ -153,6 +152,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="3. 打开通知"
+        android:visibility="gone"
         app:layout_constraintLeft_toRightOf="@id/his_btn_service"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/his_btn_connect" />
@@ -162,6 +162,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="4. 设置mtu"
+        android:visibility="gone"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/his_btn_write"
         app:layout_constraintTop_toBottomOf="@id/his_btn_connect" />
@@ -171,6 +172,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="5. 获取历史"
+        android:visibility="gone"
         app:layout_constraintLeft_toRightOf="@id/his_btn_mut"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/his_btn_connect" />
@@ -204,7 +206,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/colorPass"
-            android:paddingLeft="18dp"
+            android:gravity="center"
             android:paddingTop="2dp"
             android:paddingBottom="2dp"
             android:text="时间"
@@ -217,7 +219,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/colorPass"
-            android:paddingLeft="8dp"
+            android:gravity="center"
             android:paddingTop="2dp"
             android:paddingBottom="2dp"
             android:text="读数（m³）"
@@ -230,7 +232,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/colorPass"
-            android:paddingLeft="8dp"
+            android:gravity="center"
             android:paddingTop="2dp"
             android:paddingBottom="2dp"
             android:text="用量（m³）"

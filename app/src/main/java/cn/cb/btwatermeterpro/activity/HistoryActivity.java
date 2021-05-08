@@ -43,6 +43,7 @@ public class HistoryActivity extends BleConnectBaseActivity {
         setContentView(R.layout.activity_history);
         initBarView();
         bindView();
+        touchAddress();
     }
 
     @Override

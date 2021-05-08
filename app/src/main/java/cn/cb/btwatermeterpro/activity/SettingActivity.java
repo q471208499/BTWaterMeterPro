@@ -49,7 +49,7 @@ public class SettingActivity extends BleConnectBaseActivity {
 
     private void initEdit() {
         meterAddressSrc.setText(BTApplication.getConnectAddress() == null ? "" : BTApplication.getConnectAddress().replaceAll(":", ""));
-        meterAddressTarget.setText("");
+        meterAddressTarget.setText(BTApplication.getConnectAddress() == null ? "" : BTApplication.getConnectAddress().replaceAll(":", ""));
         initNumber.setText("");
         send.setText("");
         time.setText("");
